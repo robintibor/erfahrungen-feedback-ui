@@ -1,0 +1,11 @@
+.ui-accordion .ui-accordion-header {
+  padding-left: 25px;
+}
+
+.uebungsblatt-header {
+  color: grey;
+}
+
+#feedback-accordion {
+  display:none;
+}
