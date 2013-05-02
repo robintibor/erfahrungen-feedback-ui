@@ -9,45 +9,11 @@
   <script src="js/jquery-ui.js"></script>
 </head>
 <body>
-<div id="dropStudentsFolder">Drop here</div>
-    <script type="text/javascript">
-  jQuery(document).ready(function($) {
-      $('#dropStudentsFolder').on(
-    'dragover',
-    function(e) {
-        e.preventDefault();
-        console.log("dragover!");
-        e.stopPropagation();
-    }
-)
-$('#dropStudentsFolder').on(
-    'dragenter',
-    function(e) {
-        e.preventDefault();
-        e.stopPropagation();
-    }
-)
-$('#dropStudentsFolder').on(
-    'drop',
-    function(e){
-        if(e.originalEvent.dataTransfer){
-            if(e.originalEvent.dataTransfer.files.length) {
-                e.preventDefault();
-                e.stopPropagation();
-                /*UPLOAD FILES HERE*/
-                upload(e.originalEvent.dataTransfer.files);
-            }   
-        }
-    }
-);
-function upload(files){
-    alert('Upload '+files.length+' File(s).');
-}
-});
-    </script>
+<div id="courseFolderDrop">Drop Course-Folder here</div>
  <div id="feedback-accordion">
   
  </div>
   <script src="js/fill-accordion-texts.js"></script>
+  <script src="js/read-course-folder.js"></script>
 </body>
 </html>
