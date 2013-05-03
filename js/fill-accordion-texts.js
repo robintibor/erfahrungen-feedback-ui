@@ -74,8 +74,9 @@
     });
   };
 
-  fillFeedbackAccordionHTML(studentToExercises);
-
-  showFeedbackAccordion();
+  window.fillFeedbackAccordionHTML = function(studentToExercises) {
+    fillFeedbackAccordionHTML(studentToExercises);
+    return showFeedbackAccordion();
+  };
 
 }).call(this);

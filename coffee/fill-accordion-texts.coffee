@@ -61,8 +61,8 @@ showFeedbackAccordion = ->
     active: false,
     collapsible: true
   })
-  
 
-fillFeedbackAccordionHTML(studentToExercises)
-showFeedbackAccordion()
+window.fillFeedbackAccordionHTML = (studentToExercises) ->
+  fillFeedbackAccordionHTML(studentToExercises)
+  showFeedbackAccordion()
 

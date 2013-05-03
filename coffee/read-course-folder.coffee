@@ -1,4 +1,5 @@
-studentsToExercises = {}
+window.studentsToExercises = {}
+studentsToExercises = window.studentsToExercises
 readDirectoryOnDrop = ->
   $('#courseFolderDrop').on(
     'drop',
@@ -17,8 +18,6 @@ readCourseDirectory = (courseDirectory) ->
 
 getAllEntries = (directoryReader, callback) ->
   entries = []
-  errorHandler = (e) ->
-    console.log('FileSystem API error code: ' + e.code)
   readEntries = () ->
     directoryReader.readEntries(
       (results) ->
@@ -31,7 +30,10 @@ getAllEntries = (directoryReader, callback) ->
       errorHandler
     )
   readEntries()
-    
+
+errorHandler = (e) ->
+  console.log('FileSystem API Error Code: ' + e.code)
+
 toArray = (list) ->
   return Array.prototype.slice.call(list || [], 0)
 
@@ -41,10 +43,8 @@ readStudentDirectories = (studentDirectories) ->
     studentName = studentDirectory.name
     studentsToExercises[studentName] = {}
     directoryReader = studentDirectory.createReader()
-    getAllEntries(directoryReader, 
-      (results) ->
-        readExerciseDirectories(studentName, results)
-    )
+    readExerciseDirectoriesForThisStudent = readExerciseDirectories.bind(this, studentName)
+    getAllEntries(directoryReader, readExerciseDirectoriesForThisStudent)
 
 filterForStudentDirectories = (possibleStudentDirectories) ->
   studentDirectories = jQuery.grep(possibleStudentDirectories,
@@ -57,15 +57,14 @@ filterForStudentDirectories = (possibleStudentDirectories) ->
   return studentDirectories
 
 readExerciseDirectories = (studentName, possibleExerciseDirectories) ->
+  console.log("studentname", studentName)
   exerciseDirectories = filterForExerciseDirectories(possibleExerciseDirectories)
   for exerciseDirectory in exerciseDirectories
     directoryReader = exerciseDirectory.createReader()
-    studentsToExercises[studentName][exerciseName] = {}
     exerciseName = exerciseDirectory.name
-    getAllEntries(directoryReader,
-      (results) ->
-        readExerciseDirectory(studentName, exerciseName, results)
-    )
+    studentsToExercises[studentName][exerciseName] = {}
+    readExerciseDirectoryForThisStudent = readExerciseDirectory.bind(this, studentName, exerciseName)
+    getAllEntries(directoryReader, readExerciseDirectoryForThisStudent)
 
 filterForExerciseDirectories = (possibleExerciseDirectories) ->
   exerciseDirectories = jQuery.grep(possibleExerciseDirectories,
@@ -74,36 +73,37 @@ filterForExerciseDirectories = (possibleExerciseDirectories) ->
   )
   return exerciseDirectories
 
-readExerciseDirectory = (studentName, exerciseName, files) ->
-  for file in files
-    if file.name.match(/^[eE]rfahrungen\.txt$/)
-      addErfahrungenFile(studentName, exerciseName, file)
-    else if file.name.match(/^[fF]eedback-tutor\.txt$/)
-      addTutorFeedbackFile(studentName, exerciseName, file)
+readExerciseDirectory = (studentName, exerciseName, entries) ->
+  addErfahrungenForThisExercise = addErfahrungenFile.bind(this, studentName, exerciseName)
+  addFeedbackForThisExercise = addTutorFeedbackFile.bind(this, studentName, exerciseName)
+  for entry in entries
+    if entry.name.match(/^[eE]rfahrungen\.txt$/)
+      entry.file(addErfahrungenForThisExercise, errorHandler)
+    else if entry.name.match(/^[fF]eedback-tutor\.txt$/)
+      entry.file(addFeedbackForThisExercise, errorHandler)
 
 addErfahrungenFile = (studentName, exerciseName, file) ->
   reader = new FileReader()
+  addErfahrungenForThisExercise = addErfahrungen.bind(this, studentName, exerciseName)
   reader.onload = (event) ->
-    console.log(event.target.result)
+    erfahrungenText = event.target.result
+    addErfahrungenForThisExercise(erfahrungenText)
   reader.readAsText(file)
-  
-addTutorFeedbackFile = ->
-  
-  
+
+addErfahrungen = (studentName, exerciseName, erfahrungenText) ->
+  studentsToExercises[studentName][exerciseName].erfahrungen = erfahrungenText
+
+addTutorFeedbackFile =  (studentName, exerciseName, file) ->
+  reader = new FileReader()
+  addFeedbackForThisExercise = addFeedback.bind(this, studentName, exerciseName)
+  reader.onload = (event) ->
+    feedbackText = event.target.result
+    addFeedbackForThisExercise(feedbackText)
+  reader.readAsText(file)
+
+addFeedback = (studentName, exerciseName, feedbackText) ->
+  studentsToExercises[studentName][exerciseName].feedback = feedbackText
+
 jQuery(document).ready(($) ->
     readDirectoryOnDrop()
-    $('#courseFolderDrop').on(
-      'dragover',
-      (e) ->
-          e.preventDefault();
-          console.log("dragover new!");
-          e.stopPropagation();
-    )
-  
-  $('#courseFolderDrop').on(
-      'dragenter',
-      (e) ->
-          e.preventDefault();
-          e.stopPropagation();
-  )
 )

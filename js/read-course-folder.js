@@ -1,7 +1,9 @@
 (function() {
-  var addErfahrungenFile, addTutorFeedbackFile, filterForExerciseDirectories, filterForStudentDirectories, getAllEntries, readCourseDirectory, readDirectoryOnDrop, readExerciseDirectories, readExerciseDirectory, readStudentDirectories, studentsToExercises, toArray;
+  var addErfahrungen, addErfahrungenFile, addFeedback, addTutorFeedbackFile, errorHandler, filterForExerciseDirectories, filterForStudentDirectories, getAllEntries, readCourseDirectory, readDirectoryOnDrop, readExerciseDirectories, readExerciseDirectory, readStudentDirectories, studentsToExercises, toArray;
 
-  studentsToExercises = {};
+  window.studentsToExercises = {};
+
+  studentsToExercises = window.studentsToExercises;
 
   readDirectoryOnDrop = function() {
     return $('#courseFolderDrop').on('drop', function(event) {
@@ -26,12 +28,9 @@
   };
 
   getAllEntries = function(directoryReader, callback) {
-    var entries, errorHandler, readEntries;
+    var entries, readEntries;
 
     entries = [];
-    errorHandler = function(e) {
-      return console.log('FileSystem API error code: ' + e.code);
-    };
     readEntries = function() {
       return directoryReader.readEntries(function(results) {
         if (!results.length) {
@@ -46,12 +45,16 @@
     return readEntries();
   };
 
+  errorHandler = function(e) {
+    return console.log('FileSystem API Error Code: ' + e.code);
+  };
+
   toArray = function(list) {
     return Array.prototype.slice.call(list || [], 0);
   };
 
   readStudentDirectories = function(studentDirectories) {
-    var directoryReader, studentDirectory, studentName, _i, _len, _results;
+    var directoryReader, readExerciseDirectoriesForThisStudent, studentDirectory, studentName, _i, _len, _results;
 
     studentDirectories = filterForStudentDirectories(studentDirectories);
     _results = [];
@@ -60,9 +63,8 @@
       studentName = studentDirectory.name;
       studentsToExercises[studentName] = {};
       directoryReader = studentDirectory.createReader();
-      _results.push(getAllEntries(directoryReader, function(results) {
-        return readExerciseDirectories(studentName, results);
-      }));
+      readExerciseDirectoriesForThisStudent = readExerciseDirectories.bind(this, studentName);
+      _results.push(getAllEntries(directoryReader, readExerciseDirectoriesForThisStudent));
     }
     return _results;
   };
@@ -77,18 +79,18 @@
   };
 
   readExerciseDirectories = function(studentName, possibleExerciseDirectories) {
-    var directoryReader, exerciseDirectories, exerciseDirectory, exerciseName, _i, _len, _results;
+    var directoryReader, exerciseDirectories, exerciseDirectory, exerciseName, readExerciseDirectoryForThisStudent, _i, _len, _results;
 
+    console.log("studentname", studentName);
     exerciseDirectories = filterForExerciseDirectories(possibleExerciseDirectories);
     _results = [];
     for (_i = 0, _len = exerciseDirectories.length; _i < _len; _i++) {
       exerciseDirectory = exerciseDirectories[_i];
       directoryReader = exerciseDirectory.createReader();
-      studentsToExercises[studentName][exerciseName] = {};
       exerciseName = exerciseDirectory.name;
-      _results.push(getAllEntries(directoryReader, function(results) {
-        return readExerciseDirectory(studentName, exerciseName, results);
-      }));
+      studentsToExercises[studentName][exerciseName] = {};
+      readExerciseDirectoryForThisStudent = readExerciseDirectory.bind(this, studentName, exerciseName);
+      _results.push(getAllEntries(directoryReader, readExerciseDirectoryForThisStudent));
     }
     return _results;
   };
@@ -102,16 +104,18 @@
     return exerciseDirectories;
   };
 
-  readExerciseDirectory = function(studentName, exerciseName, files) {
-    var file, _i, _len, _results;
+  readExerciseDirectory = function(studentName, exerciseName, entries) {
+    var addErfahrungenForThisExercise, addFeedbackForThisExercise, entry, _i, _len, _results;
 
+    addErfahrungenForThisExercise = addErfahrungenFile.bind(this, studentName, exerciseName);
+    addFeedbackForThisExercise = addTutorFeedbackFile.bind(this, studentName, exerciseName);
     _results = [];
-    for (_i = 0, _len = files.length; _i < _len; _i++) {
-      file = files[_i];
-      if (file.name.match(/^[eE]rfahrungen\.txt$/)) {
-        _results.push(addErfahrungenFile(studentName, exerciseName, file));
-      } else if (file.name.match(/^[fF]eedback-tutor\.txt$/)) {
-        _results.push(addTutorFeedbackFile(studentName, exerciseName, file));
+    for (_i = 0, _len = entries.length; _i < _len; _i++) {
+      entry = entries[_i];
+      if (entry.name.match(/^[eE]rfahrungen\.txt$/)) {
+        _results.push(entry.file(addErfahrungenForThisExercise, errorHandler));
+      } else if (entry.name.match(/^[fF]eedback-tutor\.txt$/)) {
+        _results.push(entry.file(addFeedbackForThisExercise, errorHandler));
       } else {
         _results.push(void 0);
       }
@@ -120,27 +124,43 @@
   };
 
   addErfahrungenFile = function(studentName, exerciseName, file) {
-    var reader;
+    var addErfahrungenForThisExercise, reader;
 
     reader = new FileReader();
+    addErfahrungenForThisExercise = addErfahrungen.bind(this, studentName, exerciseName);
     reader.onload = function(event) {
-      return console.log(event.target.result);
+      var erfahrungenText;
+
+      erfahrungenText = event.target.result;
+      return addErfahrungenForThisExercise(erfahrungenText);
     };
     return reader.readAsText(file);
   };
 
-  addTutorFeedbackFile = function() {};
+  addErfahrungen = function(studentName, exerciseName, erfahrungenText) {
+    return studentsToExercises[studentName][exerciseName].erfahrungen = erfahrungenText;
+  };
+
+  addTutorFeedbackFile = function(studentName, exerciseName, file) {
+    var addFeedbackForThisExercise, reader;
+
+    reader = new FileReader();
+    addFeedbackForThisExercise = addFeedback.bind(this, studentName, exerciseName);
+    reader.onload = function(event) {
+      var feedbackText;
+
+      feedbackText = event.target.result;
+      return addFeedbackForThisExercise(feedbackText);
+    };
+    return reader.readAsText(file);
+  };
+
+  addFeedback = function(studentName, exerciseName, feedbackText) {
+    return studentsToExercises[studentName][exerciseName].feedback = feedbackText;
+  };
 
   jQuery(document).ready(function($) {
-    readDirectoryOnDrop();
-    return $('#courseFolderDrop').on('dragover', function(e) {
-      e.preventDefault();
-      console.log("dragover new!");
-      return e.stopPropagation();
-    });
-  }, $('#courseFolderDrop').on('dragenter', function(e) {
-    e.preventDefault();
-    return e.stopPropagation();
-  }));
+    return readDirectoryOnDrop();
+  });
 
 }).call(this);
