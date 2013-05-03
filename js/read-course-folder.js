@@ -1,5 +1,5 @@
 (function() {
-  var addErfahrungen, addErfahrungenFile, addFeedback, addTutorFeedbackFile, errorHandler, fillAccordionWhenFilesRead, filterForExerciseDirectories, filterForStudentDirectories, getAllEntries, readCourseDirectory, readDirectoryOnDrop, readExerciseDirectories, readExerciseDirectory, readStudentDirectories, studentsToExercises, toArray;
+  var addErfahrungen, addErfahrungenFile, addFeedback, addTutorFeedbackFile, errorHandler, fillAccordionWhenFilesRead, filterForExerciseDirectories, filterForStudentDirectories, getAllEntries, lastFileRead, readCourseDirectory, readDirectoryOnDrop, readExerciseDirectories, readExerciseDirectory, readStudentDirectories, studentsToExercises, toArray;
 
   window.studentsToExercises = {};
 
@@ -112,7 +112,7 @@
     _results = [];
     for (_i = 0, _len = entries.length; _i < _len; _i++) {
       entry = entries[_i];
-      if (entry.name.match(/^[eE]rfahrungen\.txt$/)) {
+      if (entry.name.match(/^[Ee]rfahrung(en){0,1}\.txt$/)) {
         _results.push(entry.file(addErfahrungenForThisExercise, errorHandler));
       } else if (entry.name.match(/^[fF]eedback-tutor\.txt$/)) {
         _results.push(entry.file(addFeedbackForThisExercise, errorHandler));
@@ -138,7 +138,10 @@
   };
 
   addErfahrungen = function(studentName, exerciseName, erfahrungenText) {
-    return studentsToExercises[studentName][exerciseName].erfahrungen = erfahrungenText;
+    var lastFileRead;
+
+    studentsToExercises[studentName][exerciseName].erfahrungen = erfahrungenText;
+    return lastFileRead = Date.now();
   };
 
   addTutorFeedbackFile = function(studentName, exerciseName, file) {
@@ -156,13 +159,23 @@
   };
 
   addFeedback = function(studentName, exerciseName, feedbackText) {
-    return studentsToExercises[studentName][exerciseName].feedback = feedbackText;
+    var lastFileRead;
+
+    studentsToExercises[studentName][exerciseName].feedback = feedbackText;
+    return lastFileRead = Date.now();
   };
 
+  lastFileRead = null;
+
   fillAccordionWhenFilesRead = function() {
-    return setTimeout(function() {
+    if (lastFileRead == null) {
+      lastFileRead = Date.now();
+    }
+    if (Date.now() - lastFileRead > 1000) {
       return window.fillFeedbackAccordionHTML(studentsToExercises);
-    }, 5000);
+    } else {
+      return setTimeout(fillAccordionWhenFilesRead, 100);
+    }
   };
 
   jQuery(document).ready(function($) {

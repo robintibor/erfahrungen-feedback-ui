@@ -77,7 +77,7 @@ readExerciseDirectory = (studentName, exerciseName, entries) ->
   addErfahrungenForThisExercise = addErfahrungenFile.bind(this, studentName, exerciseName)
   addFeedbackForThisExercise = addTutorFeedbackFile.bind(this, studentName, exerciseName)
   for entry in entries
-    if entry.name.match(/^[eE]rfahrungen\.txt$/)
+    if entry.name.match(/^[Ee]rfahrung(en){0,1}\.txt$/)
       entry.file(addErfahrungenForThisExercise, errorHandler)
     else if entry.name.match(/^[fF]eedback-tutor\.txt$/)
       entry.file(addFeedbackForThisExercise, errorHandler)
@@ -92,6 +92,7 @@ addErfahrungenFile = (studentName, exerciseName, file) ->
 
 addErfahrungen = (studentName, exerciseName, erfahrungenText) ->
   studentsToExercises[studentName][exerciseName].erfahrungen = erfahrungenText
+  lastFileRead = Date.now()
 
 addTutorFeedbackFile =  (studentName, exerciseName, file) ->
   reader = new FileReader()
@@ -103,12 +104,18 @@ addTutorFeedbackFile =  (studentName, exerciseName, file) ->
 
 addFeedback = (studentName, exerciseName, feedbackText) ->
   studentsToExercises[studentName][exerciseName].feedback = feedbackText
+  lastFileRead = Date.now()
+
+lastFileRead = null
 
 fillAccordionWhenFilesRead = ->
-  setTimeout(
-    () ->
-      window.fillFeedbackAccordionHTML(studentsToExercises)
-    5000
+  if (not lastFileRead?)
+    lastFileRead = Date.now()
+  if (Date.now() - lastFileRead > 1000)
+    window.fillFeedbackAccordionHTML(studentsToExercises)
+  else setTimeout(
+    fillAccordionWhenFilesRead
+    100
   )
 
 jQuery(document).ready(($) ->
