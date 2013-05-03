@@ -1,5 +1,5 @@
 (function() {
-  var addProperty, addPropertyFile, errorHandler, fillAccordionWhenFilesRead, filterDirectoriesWithRegExp, filterForExerciseDirectories, filterForStudentDirectories, getAllEntries, lastFileRead, readCourseDirectory, readDirectoryOnDrop, readExerciseDirectories, readExerciseDirectory, readStudentDirectories, setLastFileReadTimeIfNecessary, studentsToExercises, toArray;
+  var addProperty, addPropertyFile, errorHandler, fillAccordionWhenFilesRead, filterDirectoriesWithRegExp, filterForExerciseDirectories, filterForStudentDirectories, getAllEntries, hideBlackBorderOnDragLeave, lastFileRead, readCourseDirectory, readDirectoryOnDrop, readExerciseDirectories, readExerciseDirectory, readStudentDirectories, setLastFileReadTimeIfNecessary, showBlackBorderOnDragEnter, showYellowBorderOnDropDiv, studentsToExercises, toArray;
 
   window.studentsToExercises = {};
 
@@ -9,16 +9,22 @@
     return $('#courseFolderDrop').on('drop', function(event) {
       var courseDirectory;
 
+      event.preventDefault();
+      event.stopPropagation();
       if (event.originalEvent.dataTransfer) {
         if (event.originalEvent.dataTransfer.files.length) {
-          event.preventDefault();
-          event.stopPropagation();
           courseDirectory = event.originalEvent.dataTransfer.items[0].webkitGetAsEntry();
+          showYellowBorderOnDropDiv();
           readCourseDirectory(courseDirectory);
           return fillAccordionWhenFilesRead();
         }
       }
     });
+  };
+
+  showYellowBorderOnDropDiv = function() {
+    $('#courseFolderDrop').removeClass('activeCourseFolderDrop');
+    return $('#courseFolderDrop').addClass('droppedCourseFolderDiv');
   };
 
   readCourseDirectory = function(courseDirectory) {
@@ -160,18 +166,26 @@
     }
   };
 
-  jQuery(document).ready(function($) {
-    readDirectoryOnDrop();
-    $('#courseFolderDrop').on('dragover', function(e) {
-      e.preventDefault();
-      e.stopPropagation();
-      return console.log("dragover works! :)");
-    });
+  showBlackBorderOnDragEnter = function() {
     return $('#courseFolderDrop').on('dragenter', function(e) {
       e.preventDefault();
       e.stopPropagation();
-      return console.log("dragenter works! :)");
+      return $('#courseFolderDrop').addClass('activeCourseFolderDrop');
     });
+  };
+
+  hideBlackBorderOnDragLeave = function() {
+    return $('#courseFolderDrop').on('dragleave', function(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      return $('#courseFolderDrop').removeClass('activeCourseFolderDrop');
+    });
+  };
+
+  jQuery(document).ready(function($) {
+    readDirectoryOnDrop();
+    showBlackBorderOnDragEnter();
+    return hideBlackBorderOnDragLeave();
   });
 
 }).call(this);

@@ -4,14 +4,19 @@ readDirectoryOnDrop = ->
   $('#courseFolderDrop').on(
     'drop',
     (event) ->
-        if (event.originalEvent.dataTransfer)
-          if (event.originalEvent.dataTransfer.files.length) 
-            event.preventDefault();
-            event.stopPropagation();
-            courseDirectory = event.originalEvent.dataTransfer.items[0].webkitGetAsEntry()
-            readCourseDirectory(courseDirectory)
-            fillAccordionWhenFilesRead()
+      event.preventDefault()
+      event.stopPropagation()
+      if (event.originalEvent.dataTransfer)
+        if (event.originalEvent.dataTransfer.files.length) 
+          courseDirectory = event.originalEvent.dataTransfer.items[0].webkitGetAsEntry()
+          showYellowBorderOnDropDiv()
+          readCourseDirectory(courseDirectory)
+          fillAccordionWhenFilesRead()
   )
+
+showYellowBorderOnDropDiv = ->
+  $('#courseFolderDrop').removeClass('activeCourseFolderDrop')
+  $('#courseFolderDrop').addClass('droppedCourseFolderDiv')
 
 readCourseDirectory = (courseDirectory) ->
   courseDirectoryReader = courseDirectory.createReader()
@@ -106,21 +111,26 @@ setLastFileReadTimeIfNecessary = ->
   if (not lastFileRead?)
     lastFileRead = Date.now() + 1000
 
-jQuery(document).ready(($) ->
-  readDirectoryOnDrop()
-  $('#courseFolderDrop').on(
-      'dragover',
-      (e) ->
-          e.preventDefault();
-          e.stopPropagation();
-          console.log("dragover works! :)");
-    )
-  
+showBlackBorderOnDragEnter = ->
   $('#courseFolderDrop').on(
       'dragenter',
       (e) ->
-          e.preventDefault();
-          e.stopPropagation();
-          console.log("dragenter works! :)");
-  )
+          e.preventDefault()
+          e.stopPropagation()
+          $('#courseFolderDrop').addClass('activeCourseFolderDrop')
+    )
+
+hideBlackBorderOnDragLeave = ->
+  $('#courseFolderDrop').on(
+      'dragleave',
+      (e) ->
+          e.preventDefault()
+          e.stopPropagation()
+          $('#courseFolderDrop').removeClass('activeCourseFolderDrop')
+    )
+
+jQuery(document).ready(($) ->
+  readDirectoryOnDrop()
+  showBlackBorderOnDragEnter()
+  hideBlackBorderOnDragLeave()
 )
