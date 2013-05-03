@@ -2,11 +2,11 @@
   padding-left: 25px;
 }
 
-.uebungsblatt-header {
+.accordion-header {
   color: grey;
 }
 
-#feedback-accordion {
+#students-accordion {
   display:none;
 }
 

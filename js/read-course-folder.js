@@ -148,7 +148,7 @@
     setLastFileReadTimeIfNecessary();
     maximumTimeToReadFile = 1500;
     if (Date.now() - lastFileRead > maximumTimeToReadFile) {
-      return window.fillFeedbackAccordionHTML(studentsToExercises);
+      return window.fillAccordionHTMLs(studentsToExercises);
     } else {
       return setTimeout(fillAccordionWhenFilesRead, 100);
     }

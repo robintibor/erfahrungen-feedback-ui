@@ -96,7 +96,7 @@ fillAccordionWhenFilesRead = ->
   setLastFileReadTimeIfNecessary()
   maximumTimeToReadFile = 1500
   if (Date.now() - lastFileRead > maximumTimeToReadFile)
-    window.fillFeedbackAccordionHTML(studentsToExercises)
+    window.fillAccordionHTMLs(studentsToExercises)
   else setTimeout(
     fillAccordionWhenFilesRead
     100
