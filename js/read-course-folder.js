@@ -14,6 +14,7 @@
       if (event.originalEvent.dataTransfer) {
         if (event.originalEvent.dataTransfer.files.length) {
           courseDirectory = event.originalEvent.dataTransfer.items[0].webkitGetAsEntry();
+          showYellowBorderOnDropDiv();
           readCourseDirectory(courseDirectory);
           return fillAccordionWhenFilesRead();
         }
@@ -182,7 +183,9 @@
   };
 
   jQuery(document).ready(function($) {
-    return readDirectoryOnDrop();
+    readDirectoryOnDrop();
+    showBlackBorderOnDragEnter();
+    return hideBlackBorderOnDragLeave();
   });
 
 }).call(this);

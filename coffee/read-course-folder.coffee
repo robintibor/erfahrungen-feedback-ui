@@ -9,7 +9,7 @@ readDirectoryOnDrop = ->
       if (event.originalEvent.dataTransfer)
         if (event.originalEvent.dataTransfer.files.length) 
           courseDirectory = event.originalEvent.dataTransfer.items[0].webkitGetAsEntry()
-          #showYellowBorderOnDropDiv()
+          showYellowBorderOnDropDiv()
           readCourseDirectory(courseDirectory)
           fillAccordionWhenFilesRead()
   )
@@ -131,6 +131,6 @@ hideBlackBorderOnDragLeave = ->
 
 jQuery(document).ready(($) ->
   readDirectoryOnDrop()
-  #showBlackBorderOnDragEnter()
-  #hideBlackBorderOnDragLeave()
+  showBlackBorderOnDragEnter()
+  hideBlackBorderOnDragLeave()
 )
