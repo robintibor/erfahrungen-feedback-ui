@@ -105,5 +105,19 @@ addFeedback = (studentName, exerciseName, feedbackText) ->
   studentsToExercises[studentName][exerciseName].feedback = feedbackText
 
 jQuery(document).ready(($) ->
-    readDirectoryOnDrop()
+  readDirectoryOnDrop()
+  $('#courseFolderDrop').on(
+      'dragover',
+      (e) ->
+          e.preventDefault();
+          console.log("dragover new!2!");
+          e.stopPropagation();
+    )
+  
+  $('#courseFolderDrop').on(
+      'dragenter',
+      (e) ->
+          e.preventDefault();
+          e.stopPropagation();
+  )
 )

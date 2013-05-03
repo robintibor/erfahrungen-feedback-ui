@@ -160,7 +160,16 @@
   };
 
   jQuery(document).ready(function($) {
-    return readDirectoryOnDrop();
+    readDirectoryOnDrop();
+    $('#courseFolderDrop').on('dragover', function(e) {
+      e.preventDefault();
+      console.log("dragover new!2!");
+      return e.stopPropagation();
+    });
+    return $('#courseFolderDrop').on('dragenter', function(e) {
+      e.preventDefault();
+      return e.stopPropagation();
+    });
   });
 
 }).call(this);
