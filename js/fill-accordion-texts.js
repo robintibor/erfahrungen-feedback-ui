@@ -1,5 +1,5 @@
 (function() {
-  var createAccordionItem, createExerciseAccordionHTML, createExercisesHTML, createExercisesToStudents, createStudentAccordionHTML, createStudentsHTML, fillExercisesAccordionHTML, fillStudentsAccordionHTML, getExercisesSortedAlphabetically, getStudentsSortedAlphabetically, showExercisesAccordion, showStudentsAccordion, studentToExercises,
+  var createAccordionItem, createExerciseAccordionHTML, createExercisesAccordion, createExercisesHTML, createExercisesToStudents, createStudentAccordionHTML, createStudentsAccordion, createStudentsHTML, fillExercisesAccordionHTML, fillStudentsAccordionHTML, getExercisesSortedAlphabetically, getFullStudentsName, getStudentsSortedAlphabetically, removeFolderDropDiv, rzKuerzelToFullName, showFeedbackAndErfahrungen, studentToExercises,
     __hasProp = {}.hasOwnProperty;
 
   fillStudentsAccordionHTML = function(studentToExercises) {
@@ -24,10 +24,11 @@
   };
 
   createStudentAccordionHTML = function(student, studentExercises) {
-    var exercisesHTML;
+    var exercisesHTML, fullStudentName;
 
     exercisesHTML = createExercisesHTML(studentExercises);
-    return "<h3>" + student + "</h3>  " + exercisesHTML;
+    fullStudentName = getFullStudentsName(student);
+    return "<h3>" + fullStudentName + " (" + student + ")</h3>  " + exercisesHTML;
   };
 
   createExercisesHTML = function(studentExercises) {
@@ -55,11 +56,18 @@
   };
 
   createAccordionItem = function(header, erfahrungen, feedback) {
-    return "      <div class='.accordion-header'>" + header + "</div>      <div class='well well-small'>        <pre class='well well-small'>" + erfahrungen + "</pre>        <pre class='alert alert-success'>" + feedback + "</pre>      </div>";
+    return "      <div class='accordion-header'>" + header + "</div>      <div class='well well-small texts'>        <pre class='well well-small'>" + erfahrungen + "</pre>        <pre class='alert alert-success'>" + feedback + "</pre>      </div>";
   };
 
-  showStudentsAccordion = function() {
-    $("#students-accordion").show();
+  getFullStudentsName = function(studentsRzKuerzel) {
+    if (rzKuerzelToFullName[studentsRzKuerzel]) {
+      return rzKuerzelToFullName[studentsRzKuerzel];
+    } else {
+      return "";
+    }
+  };
+
+  createStudentsAccordion = function() {
     return $("#students-accordion").accordion({
       active: false,
       collapsible: true,
@@ -93,7 +101,6 @@
         exerciseTexts = exercises[exercise];
         exercisesToStudents[exercise] = exercisesToStudents[exercise] != null ? exercisesToStudents[exercise] : {};
         exercisesToStudents[exercise][student] = exerciseTexts;
-        console.log(exercisesToStudents);
       }
     }
     return exercisesToStudents;
@@ -107,23 +114,23 @@
   };
 
   createStudentsHTML = function(exerciseStudents) {
-    var erfahrungen, feedback, studentName, studentTexts, studentsHTML, studentsSorted, _i, _len;
+    var erfahrungen, feedback, studentFullNameAndKuerzel, studentKuerzel, studentTexts, studentsHTML, studentsSorted, _i, _len;
 
     studentsHTML = "<div>";
     studentsSorted = getStudentsSortedAlphabetically(exerciseStudents);
     for (_i = 0, _len = studentsSorted.length; _i < _len; _i++) {
-      studentName = studentsSorted[_i];
-      studentTexts = exerciseStudents[studentName];
+      studentKuerzel = studentsSorted[_i];
+      studentFullNameAndKuerzel = "" + (getFullStudentsName(studentKuerzel)) + " (" + studentKuerzel + ")";
+      studentTexts = exerciseStudents[studentKuerzel];
       erfahrungen = studentTexts.erfahrungen;
       feedback = studentTexts.feedback;
-      studentsHTML += createAccordionItem(studentName, erfahrungen, feedback);
+      studentsHTML += createAccordionItem(studentFullNameAndKuerzel, erfahrungen, feedback);
     }
     studentsHTML += "</div>";
     return studentsHTML;
   };
 
-  showExercisesAccordion = function() {
-    $("#exercises-accordion").show();
+  createExercisesAccordion = function() {
     return $("#exercises-accordion").accordion({
       active: false,
       collapsible: true,
@@ -131,13 +138,59 @@
     });
   };
 
+  showFeedbackAndErfahrungen = function() {
+    return $('#feedbackAndErfahrungenContainer').show();
+  };
+
+  removeFolderDropDiv = function() {
+    return $('#courseFolderDrop').remove();
+  };
+
   window.fillAccordionHTMLs = function(studentToExercises) {
-    console.log("filling feedback");
-    console.log("filling feedback with", studentToExercises);
     fillStudentsAccordionHTML(studentToExercises);
-    showStudentsAccordion();
     fillExercisesAccordionHTML(studentToExercises);
-    return showExercisesAccordion();
+    createStudentsAccordion();
+    createExercisesAccordion();
+    showFeedbackAndErfahrungen();
+    return removeFolderDropDiv();
+  };
+
+  rzKuerzelToFullName = {
+    ab308: "Anja Blickensdoerfer",
+    ak346: "Alexander Kozhinov",
+    bh102: "Bjoern Hagemeister",
+    ck1024: "Christine Ketterer",
+    ck76: "Christopher Krolla",
+    cs434: "Colin Seibel",
+    df42: "Dominik Froehlich",
+    dk124: "Danijela Krpic",
+    er56: "Elias Rosch",
+    fb165: "Felix Baessgen",
+    hb1003: "Hannah Bast",
+    hi3: "Hendrik Intveen",
+    hj22: "Hannes Jeworowsky",
+    is118: "Iradj Solouk",
+    jd126: "Joel Henrique Danker",
+    jg225: "Juergen Gutt",
+    js542: "Jens Schindler",
+    jr76: "Julian Reimer",
+    kl92: "Karl-Robert Lappe",
+    ls305: "Lars Sipos",
+    lz33: "Lukas Zimmermann",
+    mf220: "Marlene Fiedler",
+    mk211: "Martin Killian",
+    mk488: "Michael Kotzjan",
+    mp121: "Michael Petretti",
+    mp208: "Meik Pilot",
+    mr252: "Moritz Rauch",
+    mt146: "Marius Tetard",
+    mz70: "Mathias Zink",
+    ok13: "Oemer Keskin",
+    sb404: "Sebastian Buchfink",
+    sk163: "Stefan Koeck",
+    sw127: "Samuel Weishaupt",
+    tm122: "Tano Valentin Mueller",
+    vw47: "Vivica Wirth"
   };
 
   studentToExercises = {

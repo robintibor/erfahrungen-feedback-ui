@@ -164,12 +164,13 @@
     readDirectoryOnDrop();
     $('#courseFolderDrop').on('dragover', function(e) {
       e.preventDefault();
-      console.log("dragover works! :)");
-      return e.stopPropagation();
+      e.stopPropagation();
+      return console.log("dragover works! :)");
     });
     return $('#courseFolderDrop').on('dragenter', function(e) {
       e.preventDefault();
-      return e.stopPropagation();
+      e.stopPropagation();
+      return console.log("dragenter works! :)");
     });
   });
 

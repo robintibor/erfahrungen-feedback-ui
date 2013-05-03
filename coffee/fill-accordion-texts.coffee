@@ -13,7 +13,8 @@ getStudentsSortedAlphabetically = (studentToExercises) ->
   
 createStudentAccordionHTML = (student, studentExercises) ->
   exercisesHTML = createExercisesHTML(studentExercises)
-  return "<h3>#{student}</h3>
+  fullStudentName = getFullStudentsName(student)
+  return "<h3>#{fullStudentName} (#{student})</h3>
   #{exercisesHTML}"
 
 createExercisesHTML = (studentExercises) ->
@@ -34,14 +35,19 @@ getExercisesSortedAlphabetically = (studentExercises) ->
 
 createAccordionItem = (header, erfahrungen, feedback) ->
   return "
-      <div class='.accordion-header'>#{header}</div>
-      <div class='well well-small'>
+      <div class='accordion-header'>#{header}</div>
+      <div class='well well-small texts'>
         <pre class='well well-small'>#{erfahrungen}</pre>
         <pre class='alert alert-success'>#{feedback}</pre>
       </div>"
 
-showStudentsAccordion = ->
-  $("#students-accordion").show()
+getFullStudentsName = (studentsRzKuerzel) ->
+  if (rzKuerzelToFullName[studentsRzKuerzel])
+    return rzKuerzelToFullName[studentsRzKuerzel]
+  else 
+    return ""
+
+createStudentsAccordion = ->
   $("#students-accordion").accordion({
     active: false,
     collapsible: true,
@@ -64,7 +70,6 @@ createExercisesToStudents = (studentToExercises) ->
       # make sure object has exercise, if it had not been seen before
       exercisesToStudents[exercise] = if  exercisesToStudents[exercise]? then  exercisesToStudents[exercise] else {}
       exercisesToStudents[exercise][student] = exerciseTexts
-      console.log(exercisesToStudents)
   return exercisesToStudents
 
 createExerciseAccordionHTML = (exercise, exerciseStudents) ->
@@ -75,29 +80,73 @@ createExerciseAccordionHTML = (exercise, exerciseStudents) ->
 createStudentsHTML = (exerciseStudents) ->
   studentsHTML = "<div>"
   studentsSorted = getStudentsSortedAlphabetically(exerciseStudents)
-  for studentName in studentsSorted
-    studentTexts = exerciseStudents[studentName]
+  for studentKuerzel in studentsSorted
+    studentFullNameAndKuerzel = "#{getFullStudentsName(studentKuerzel)} (#{studentKuerzel})"
+    studentTexts = exerciseStudents[studentKuerzel]
     erfahrungen = studentTexts.erfahrungen
     feedback = studentTexts.feedback
-    studentsHTML += createAccordionItem(studentName, erfahrungen, feedback)
+    studentsHTML += createAccordionItem(studentFullNameAndKuerzel, erfahrungen, feedback)
   studentsHTML += "</div>"
   return studentsHTML
   
-showExercisesAccordion = ->
-  $("#exercises-accordion").show()
+createExercisesAccordion = ->
   $("#exercises-accordion").accordion({
     active: false,
     collapsible: true,
     heightStyle: "content"
   })
 
+showFeedbackAndErfahrungen = ->
+  $('#feedbackAndErfahrungenContainer').show()
+
+removeFolderDropDiv = ->
+  $('#courseFolderDrop').remove()
+
 window.fillAccordionHTMLs = (studentToExercises) ->
-  console.log("filling feedback")
-  console.log("filling feedback with", studentToExercises)
   fillStudentsAccordionHTML(studentToExercises)
-  showStudentsAccordion()
   fillExercisesAccordionHTML(studentToExercises)
-  showExercisesAccordion()
+  createStudentsAccordion()
+  createExercisesAccordion()
+  showFeedbackAndErfahrungen()
+  removeFolderDropDiv()
+
+rzKuerzelToFullName = {
+  ab308: "Anja Blickensdoerfer",
+  ak346: "Alexander Kozhinov",
+  bh102: "Bjoern Hagemeister",
+  ck1024: "Christine Ketterer",
+  ck76: "Christopher Krolla",
+  cs434: "Colin Seibel",
+  df42: "Dominik Froehlich",
+  dk124: "Danijela Krpic",
+  er56: "Elias Rosch",
+  fb165: "Felix Baessgen",
+  hb1003: "Hannah Bast",
+  hi3: "Hendrik Intveen",
+  hj22: "Hannes Jeworowsky",
+  is118: "Iradj Solouk",
+  jd126: "Joel Henrique Danker",
+  jg225: "Juergen Gutt",
+  js542: "Jens Schindler",
+  jr76: "Julian Reimer",
+  kl92: "Karl-Robert Lappe",
+  ls305: "Lars Sipos",
+  lz33: "Lukas Zimmermann",
+  mf220: "Marlene Fiedler",
+  mk211: "Martin Killian",
+  mk488: "Michael Kotzjan",
+  mp121: "Michael Petretti",
+  mp208: "Meik Pilot",
+  mr252: "Moritz Rauch",
+  mt146: "Marius Tetard",
+  mz70: "Mathias Zink",
+  ok13: "Oemer Keskin",
+  sb404: "Sebastian Buchfink",
+  sk163: "Stefan Koeck",
+  sw127: "Samuel Weishaupt",
+  tm122: "Tano Valentin Mueller",
+  vw47: "Vivica Wirth",
+}
 
 
 # for tests :))
@@ -124,7 +173,4 @@ studentToExercises = {
   }
 }
 
-#fillStudentsAccordionHTML(studentToExercises)
-#showStudentsAccordion()
-#fillExercisesAccordionHTML(studentToExercises)
-#showExercisesAccordion()
+# for tests window.fillAccordionHTMLs(studentToExercises)

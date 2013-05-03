@@ -3,11 +3,15 @@
 }
 
 .accordion-header {
-  color: grey;
+  margin: 3px;
 }
 
-#students-accordion {
+#feedbackAndErfahrungenContainer {
   display:none;
+}
+
+.activeCourseFolderDrop {
+  border-color: black;
 }
 
 #courseFolderDrop{

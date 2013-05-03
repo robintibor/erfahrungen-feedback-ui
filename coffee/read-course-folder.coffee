@@ -112,8 +112,8 @@ jQuery(document).ready(($) ->
       'dragover',
       (e) ->
           e.preventDefault();
-          console.log("dragover works! :)");
           e.stopPropagation();
+          console.log("dragover works! :)");
     )
   
   $('#courseFolderDrop').on(
@@ -121,5 +121,6 @@ jQuery(document).ready(($) ->
       (e) ->
           e.preventDefault();
           e.stopPropagation();
+          console.log("dragenter works! :)");
   )
 )
