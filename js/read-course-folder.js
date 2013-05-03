@@ -1,5 +1,5 @@
 (function() {
-  var addErfahrungen, addErfahrungenFile, addFeedback, addTutorFeedbackFile, errorHandler, fillAccordionWhenFilesRead, filterForExerciseDirectories, filterForStudentDirectories, getAllEntries, lastFileRead, readCourseDirectory, readDirectoryOnDrop, readExerciseDirectories, readExerciseDirectory, readStudentDirectories, studentsToExercises, toArray;
+  var addProperty, addPropertyFile, errorHandler, fillAccordionWhenFilesRead, filterDirectoriesWithRegExp, filterForExerciseDirectories, filterForStudentDirectories, getAllEntries, lastFileRead, readCourseDirectory, readDirectoryOnDrop, readExerciseDirectories, readExerciseDirectory, readStudentDirectories, setLastFileReadTimeIfNecessary, studentsToExercises, toArray;
 
   window.studentsToExercises = {};
 
@@ -71,12 +71,7 @@
   };
 
   filterForStudentDirectories = function(possibleStudentDirectories) {
-    var studentDirectories;
-
-    studentDirectories = jQuery.grep(possibleStudentDirectories, function(possibleDirectory) {
-      return possibleDirectory.name.match(/^[a-z]{2}[0-9]{1,3}$/);
-    });
-    return studentDirectories;
+    return filterDirectoriesWithRegExp(possibleStudentDirectories, /^[a-z]{2}[0-9]{1,3}$/);
   };
 
   readExerciseDirectories = function(studentName, possibleExerciseDirectories) {
@@ -96,19 +91,20 @@
   };
 
   filterForExerciseDirectories = function(possibleExerciseDirectories) {
-    var exerciseDirectories;
+    return filterDirectoriesWithRegExp(possibleExerciseDirectories, /bungsblatt-[0-9]{1,2}$/);
+  };
 
-    exerciseDirectories = jQuery.grep(possibleExerciseDirectories, function(possibleDirectory) {
-      return possibleDirectory.name.match(/bungsblatt-[0-9]{1,2}$/);
+  filterDirectoriesWithRegExp = function(directories, regexp) {
+    return jQuery.grep(directories, function(directory) {
+      return directory.name.match(regexp);
     });
-    return exerciseDirectories;
   };
 
   readExerciseDirectory = function(studentName, exerciseName, entries) {
     var addErfahrungenForThisExercise, addFeedbackForThisExercise, entry, _i, _len, _results;
 
-    addErfahrungenForThisExercise = addErfahrungenFile.bind(this, studentName, exerciseName);
-    addFeedbackForThisExercise = addTutorFeedbackFile.bind(this, studentName, exerciseName);
+    addErfahrungenForThisExercise = addPropertyFile.bind(this, studentName, exerciseName, "erfahrungen");
+    addFeedbackForThisExercise = addPropertyFile.bind(this, studentName, exerciseName, "feedback");
     _results = [];
     for (_i = 0, _len = entries.length; _i < _len; _i++) {
       entry = entries[_i];
@@ -123,58 +119,44 @@
     return _results;
   };
 
-  addErfahrungenFile = function(studentName, exerciseName, file) {
-    var addErfahrungenForThisExercise, reader;
+  addPropertyFile = function(studentName, exerciseName, property, file) {
+    var addPropertyToThisExercise, reader;
 
     reader = new FileReader();
-    addErfahrungenForThisExercise = addErfahrungen.bind(this, studentName, exerciseName);
+    addPropertyToThisExercise = addProperty.bind(this, studentName, exerciseName, property);
     reader.onload = function(event) {
-      var erfahrungenText;
+      var propertyText;
 
-      erfahrungenText = event.target.result;
-      return addErfahrungenForThisExercise(erfahrungenText);
+      propertyText = event.target.result;
+      return addPropertyToThisExercise(propertyText);
     };
     return reader.readAsText(file);
   };
 
-  addErfahrungen = function(studentName, exerciseName, erfahrungenText) {
+  addProperty = function(studentName, exerciseName, property, propertyText) {
     var lastFileRead;
 
-    studentsToExercises[studentName][exerciseName].erfahrungen = erfahrungenText;
-    return lastFileRead = Date.now();
-  };
-
-  addTutorFeedbackFile = function(studentName, exerciseName, file) {
-    var addFeedbackForThisExercise, reader;
-
-    reader = new FileReader();
-    addFeedbackForThisExercise = addFeedback.bind(this, studentName, exerciseName);
-    reader.onload = function(event) {
-      var feedbackText;
-
-      feedbackText = event.target.result;
-      return addFeedbackForThisExercise(feedbackText);
-    };
-    return reader.readAsText(file);
-  };
-
-  addFeedback = function(studentName, exerciseName, feedbackText) {
-    var lastFileRead;
-
-    studentsToExercises[studentName][exerciseName].feedback = feedbackText;
+    studentsToExercises[studentName][exerciseName][property] = propertyText;
     return lastFileRead = Date.now();
   };
 
   lastFileRead = null;
 
   fillAccordionWhenFilesRead = function() {
-    if (lastFileRead == null) {
-      lastFileRead = Date.now();
-    }
-    if (Date.now() - lastFileRead > 1000) {
+    var maximumTimeToReadFile;
+
+    setLastFileReadTimeIfNecessary();
+    maximumTimeToReadFile = 1500;
+    if (Date.now() - lastFileRead > maximumTimeToReadFile) {
       return window.fillFeedbackAccordionHTML(studentsToExercises);
     } else {
       return setTimeout(fillAccordionWhenFilesRead, 100);
+    }
+  };
+
+  setLastFileReadTimeIfNecessary = function() {
+    if (lastFileRead == null) {
+      return lastFileRead = Date.now() + 1000;
     }
   };
 
@@ -182,7 +164,7 @@
     readDirectoryOnDrop();
     $('#courseFolderDrop').on('dragover', function(e) {
       e.preventDefault();
-      console.log("dragover new!2!");
+      console.log("dragover works! :)");
       return e.stopPropagation();
     });
     return $('#courseFolderDrop').on('dragenter', function(e) {

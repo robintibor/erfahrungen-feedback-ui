@@ -48,12 +48,8 @@ readStudentDirectories = (studentDirectories) ->
     getAllEntries(directoryReader, readExerciseDirectoriesForThisStudent)
 
 filterForStudentDirectories = (possibleStudentDirectories) ->
-  studentDirectories = jQuery.grep(possibleStudentDirectories,
-    (possibleDirectory) ->
-      # studentdirectoryname should be rz-kuerzel like rs123
-      return possibleDirectory.name.match(/^[a-z]{2}[0-9]{1,3}$/)
-  )
-  return studentDirectories
+  # studentdirectoryname should be rz-kuerzel like rs123
+  return filterDirectoriesWithRegExp(possibleStudentDirectories, /^[a-z]{2}[0-9]{1,3}$/)
 
 readExerciseDirectories = (studentName, possibleExerciseDirectories) ->
   exerciseDirectories = filterForExerciseDirectories(possibleExerciseDirectories)
@@ -65,56 +61,50 @@ readExerciseDirectories = (studentName, possibleExerciseDirectories) ->
     getAllEntries(directoryReader, readExerciseDirectoryForThisStudent)
 
 filterForExerciseDirectories = (possibleExerciseDirectories) ->
-  exerciseDirectories = jQuery.grep(possibleExerciseDirectories,
-    (possibleDirectory) ->
-      possibleDirectory.name.match(/bungsblatt-[0-9]{1,2}$/)
+  return filterDirectoriesWithRegExp(possibleExerciseDirectories, /bungsblatt-[0-9]{1,2}$/)
+
+filterDirectoriesWithRegExp = (directories, regexp) ->
+  return jQuery.grep(directories,
+    (directory) ->
+      directory.name.match(regexp)
   )
-  return exerciseDirectories
 
 readExerciseDirectory = (studentName, exerciseName, entries) ->
-  addErfahrungenForThisExercise = addErfahrungenFile.bind(this, studentName, exerciseName)
-  addFeedbackForThisExercise = addTutorFeedbackFile.bind(this, studentName, exerciseName)
+  addErfahrungenForThisExercise = addPropertyFile.bind(this, studentName, exerciseName, "erfahrungen")
+  addFeedbackForThisExercise = addPropertyFile.bind(this, studentName, exerciseName, "feedback")
   for entry in entries
     if entry.name.match(/^[Ee]rfahrung(en){0,1}\.txt$/)
       entry.file(addErfahrungenForThisExercise, errorHandler)
     else if entry.name.match(/^[fF]eedback-tutor\.txt$/)
       entry.file(addFeedbackForThisExercise, errorHandler)
 
-addErfahrungenFile = (studentName, exerciseName, file) ->
+addPropertyFile = (studentName, exerciseName, property, file) ->
   reader = new FileReader()
-  addErfahrungenForThisExercise = addErfahrungen.bind(this, studentName, exerciseName)
+  addPropertyToThisExercise = addProperty.bind(this, studentName, exerciseName, property)
   reader.onload = (event) ->
-    erfahrungenText = event.target.result
-    addErfahrungenForThisExercise(erfahrungenText)
+    propertyText = event.target.result
+    addPropertyToThisExercise(propertyText)
   reader.readAsText(file)
 
-addErfahrungen = (studentName, exerciseName, erfahrungenText) ->
-  studentsToExercises[studentName][exerciseName].erfahrungen = erfahrungenText
-  lastFileRead = Date.now()
-
-addTutorFeedbackFile =  (studentName, exerciseName, file) ->
-  reader = new FileReader()
-  addFeedbackForThisExercise = addFeedback.bind(this, studentName, exerciseName)
-  reader.onload = (event) ->
-    feedbackText = event.target.result
-    addFeedbackForThisExercise(feedbackText)
-  reader.readAsText(file)
-
-addFeedback = (studentName, exerciseName, feedbackText) ->
-  studentsToExercises[studentName][exerciseName].feedback = feedbackText
+addProperty = (studentName, exerciseName, property, propertyText) ->
+  studentsToExercises[studentName][exerciseName][property] = propertyText
   lastFileRead = Date.now()
 
 lastFileRead = null
 
 fillAccordionWhenFilesRead = ->
-  if (not lastFileRead?)
-    lastFileRead = Date.now()
-  if (Date.now() - lastFileRead > 1000)
+  setLastFileReadTimeIfNecessary()
+  maximumTimeToReadFile = 1500
+  if (Date.now() - lastFileRead > maximumTimeToReadFile)
     window.fillFeedbackAccordionHTML(studentsToExercises)
   else setTimeout(
     fillAccordionWhenFilesRead
     100
   )
+
+setLastFileReadTimeIfNecessary = ->
+  if (not lastFileRead?)
+    lastFileRead = Date.now() + 1000
 
 jQuery(document).ready(($) ->
   readDirectoryOnDrop()
@@ -122,7 +112,7 @@ jQuery(document).ready(($) ->
       'dragover',
       (e) ->
           e.preventDefault();
-          console.log("dragover new!2!");
+          console.log("dragover works! :)");
           e.stopPropagation();
     )
   
