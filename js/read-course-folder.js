@@ -9,10 +9,10 @@
     return $('#courseFolderDrop').on('drop', function(event) {
       var courseDirectory;
 
-      event.preventDefault();
-      event.stopPropagation();
       if (event.originalEvent.dataTransfer) {
         if (event.originalEvent.dataTransfer.files.length) {
+          event.preventDefault();
+          event.stopPropagation();
           courseDirectory = event.originalEvent.dataTransfer.items[0].webkitGetAsEntry();
           showYellowBorderOnDropDiv();
           readCourseDirectory(courseDirectory);
@@ -167,17 +167,17 @@
   };
 
   showBlackBorderOnDragEnter = function() {
-    return $('#courseFolderDrop').on('dragenter', function(e) {
-      e.preventDefault();
-      e.stopPropagation();
+    return $('#courseFolderDrop').on('dragenter', function(event) {
+      event.preventDefault();
+      event.stopPropagation();
       return $('#courseFolderDrop').addClass('activeCourseFolderDrop');
     });
   };
 
   hideBlackBorderOnDragLeave = function() {
-    return $('#courseFolderDrop').on('dragleave', function(e) {
-      e.preventDefault();
-      e.stopPropagation();
+    return $('#courseFolderDrop').on('dragleave', function(event) {
+      event.preventDefault();
+      event.stopPropagation();
       return $('#courseFolderDrop').removeClass('activeCourseFolderDrop');
     });
   };

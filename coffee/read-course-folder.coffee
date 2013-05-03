@@ -4,10 +4,10 @@ readDirectoryOnDrop = ->
   $('#courseFolderDrop').on(
     'drop',
     (event) ->
-      event.preventDefault()
-      event.stopPropagation()
       if (event.originalEvent.dataTransfer)
         if (event.originalEvent.dataTransfer.files.length) 
+          event.preventDefault()
+          event.stopPropagation()
           courseDirectory = event.originalEvent.dataTransfer.items[0].webkitGetAsEntry()
           showYellowBorderOnDropDiv()
           readCourseDirectory(courseDirectory)
@@ -113,21 +113,21 @@ setLastFileReadTimeIfNecessary = ->
 
 showBlackBorderOnDragEnter = ->
   $('#courseFolderDrop').on(
-      'dragenter',
-      (e) ->
-          e.preventDefault()
-          e.stopPropagation()
-          $('#courseFolderDrop').addClass('activeCourseFolderDrop')
-    )
+    'dragenter',
+    (event) ->
+      event.preventDefault()
+      event.stopPropagation()
+      $('#courseFolderDrop').addClass('activeCourseFolderDrop')
+  )
 
 hideBlackBorderOnDragLeave = ->
   $('#courseFolderDrop').on(
-      'dragleave',
-      (e) ->
-          e.preventDefault()
-          e.stopPropagation()
-          $('#courseFolderDrop').removeClass('activeCourseFolderDrop')
-    )
+    'dragleave',
+    (event) ->
+      event.preventDefault()
+      event.stopPropagation()
+      $('#courseFolderDrop').removeClass('activeCourseFolderDrop')
+  )
 
 jQuery(document).ready(($) ->
   readDirectoryOnDrop()
