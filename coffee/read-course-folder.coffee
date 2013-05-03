@@ -120,6 +120,15 @@ showBlackBorderOnDragEnter = ->
       $('#courseFolderDrop').addClass('activeCourseFolderDrop')
   )
 
+preventPropagationOnDragOver = ->
+  $('#courseFolderDrop').on(
+    'dragover',
+    (event) ->
+      event.preventDefault()
+      event.stopPropagation()
+  )
+  
+
 hideBlackBorderOnDragLeave = ->
   $('#courseFolderDrop').on(
     'dragleave',
@@ -132,5 +141,6 @@ hideBlackBorderOnDragLeave = ->
 jQuery(document).ready(($) ->
   readDirectoryOnDrop()
   showBlackBorderOnDragEnter()
+  preventPropagationOnDragOver()
   hideBlackBorderOnDragLeave()
 )

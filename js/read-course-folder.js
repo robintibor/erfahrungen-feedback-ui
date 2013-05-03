@@ -1,5 +1,5 @@
 (function() {
-  var addProperty, addPropertyFile, errorHandler, fillAccordionWhenFilesRead, filterDirectoriesWithRegExp, filterForExerciseDirectories, filterForStudentDirectories, getAllEntries, hideBlackBorderOnDragLeave, lastFileRead, readCourseDirectory, readDirectoryOnDrop, readExerciseDirectories, readExerciseDirectory, readStudentDirectories, setLastFileReadTimeIfNecessary, showBlackBorderOnDragEnter, showYellowBorderOnDropDiv, studentsToExercises, toArray;
+  var addProperty, addPropertyFile, errorHandler, fillAccordionWhenFilesRead, filterDirectoriesWithRegExp, filterForExerciseDirectories, filterForStudentDirectories, getAllEntries, hideBlackBorderOnDragLeave, lastFileRead, preventPropagationOnDragOver, readCourseDirectory, readDirectoryOnDrop, readExerciseDirectories, readExerciseDirectory, readStudentDirectories, setLastFileReadTimeIfNecessary, showBlackBorderOnDragEnter, showYellowBorderOnDropDiv, studentsToExercises, toArray;
 
   window.studentsToExercises = {};
 
@@ -174,6 +174,13 @@
     });
   };
 
+  preventPropagationOnDragOver = function() {
+    return $('#courseFolderDrop').on('dragover', function(event) {
+      event.preventDefault();
+      return event.stopPropagation();
+    });
+  };
+
   hideBlackBorderOnDragLeave = function() {
     return $('#courseFolderDrop').on('dragleave', function(event) {
       event.preventDefault();
@@ -185,6 +192,7 @@
   jQuery(document).ready(function($) {
     readDirectoryOnDrop();
     showBlackBorderOnDragEnter();
+    preventPropagationOnDragOver();
     return hideBlackBorderOnDragLeave();
   });
 
