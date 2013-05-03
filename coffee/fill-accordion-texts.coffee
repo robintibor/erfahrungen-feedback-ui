@@ -41,28 +41,35 @@ createStudentAccordionHTML = (student, studentExercises) ->
 
 createExercisesHTML = (studentExercises) ->
   exerciseHTML = "<div>"
-  for own exerciseName, exerciseTexts of studentExercises
+  studentExercisesSorted = getExercisesSortedAlphabetically(studentExercises)
+  for exerciseName in studentExercisesSorted
+    exerciseTexts = studentExercises[exerciseName]
     exerciseHTML += "
     <div class='uebungsblatt-header header'>#{exerciseName} </div>
       <div class='well well-small'>
-        <div class='well well-small'>
-          #{exerciseTexts.erfahrungen}
-        </div>
-        <div class='alert alert-success'>
-          #{exerciseTexts.feedback}
-        </div>
+        <pre class='well well-small'>#{exerciseTexts.erfahrungen}</pre>
+        <pre class='alert alert-success'>#{exerciseTexts.feedback}</pre>
       </div>"
   exerciseHTML += "</div>"
   return exerciseHTML
+  
+getExercisesSortedAlphabetically = (studentExercises) ->
+  exercises = Object.keys(studentExercises)
+  exercises.sort()
+  return exercises
+
 
 showFeedbackAccordion = ->
   $("#feedback-accordion").show()
   $("#feedback-accordion").accordion({
     active: false,
-    collapsible: true
+    collapsible: true,
+    heightStyle: "content"
   })
 
 window.fillFeedbackAccordionHTML = (studentToExercises) ->
+  console.log("filling feedback")
+  console.log("filling feedback with", studentToExercises)
   fillFeedbackAccordionHTML(studentToExercises)
   showFeedbackAccordion()
 

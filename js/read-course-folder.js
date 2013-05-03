@@ -1,5 +1,5 @@
 (function() {
-  var addErfahrungen, addErfahrungenFile, addFeedback, addTutorFeedbackFile, errorHandler, filterForExerciseDirectories, filterForStudentDirectories, getAllEntries, readCourseDirectory, readDirectoryOnDrop, readExerciseDirectories, readExerciseDirectory, readStudentDirectories, studentsToExercises, toArray;
+  var addErfahrungen, addErfahrungenFile, addFeedback, addTutorFeedbackFile, errorHandler, fillAccordionWhenFilesRead, filterForExerciseDirectories, filterForStudentDirectories, getAllEntries, readCourseDirectory, readDirectoryOnDrop, readExerciseDirectories, readExerciseDirectory, readStudentDirectories, studentsToExercises, toArray;
 
   window.studentsToExercises = {};
 
@@ -14,7 +14,8 @@
           event.preventDefault();
           event.stopPropagation();
           courseDirectory = event.originalEvent.dataTransfer.items[0].webkitGetAsEntry();
-          return readCourseDirectory(courseDirectory);
+          readCourseDirectory(courseDirectory);
+          return fillAccordionWhenFilesRead();
         }
       }
     });
@@ -81,7 +82,6 @@
   readExerciseDirectories = function(studentName, possibleExerciseDirectories) {
     var directoryReader, exerciseDirectories, exerciseDirectory, exerciseName, readExerciseDirectoryForThisStudent, _i, _len, _results;
 
-    console.log("studentname", studentName);
     exerciseDirectories = filterForExerciseDirectories(possibleExerciseDirectories);
     _results = [];
     for (_i = 0, _len = exerciseDirectories.length; _i < _len; _i++) {
@@ -157,6 +157,12 @@
 
   addFeedback = function(studentName, exerciseName, feedbackText) {
     return studentsToExercises[studentName][exerciseName].feedback = feedbackText;
+  };
+
+  fillAccordionWhenFilesRead = function() {
+    return setTimeout(function() {
+      return window.fillFeedbackAccordionHTML(studentsToExercises);
+    }, 5000);
   };
 
   jQuery(document).ready(function($) {

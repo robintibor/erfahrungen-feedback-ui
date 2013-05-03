@@ -10,6 +10,7 @@ readDirectoryOnDrop = ->
             event.stopPropagation();
             courseDirectory = event.originalEvent.dataTransfer.items[0].webkitGetAsEntry()
             readCourseDirectory(courseDirectory)
+            fillAccordionWhenFilesRead()
   )
 
 readCourseDirectory = (courseDirectory) ->
@@ -57,7 +58,6 @@ filterForStudentDirectories = (possibleStudentDirectories) ->
   return studentDirectories
 
 readExerciseDirectories = (studentName, possibleExerciseDirectories) ->
-  console.log("studentname", studentName)
   exerciseDirectories = filterForExerciseDirectories(possibleExerciseDirectories)
   for exerciseDirectory in exerciseDirectories
     directoryReader = exerciseDirectory.createReader()
@@ -103,6 +103,13 @@ addTutorFeedbackFile =  (studentName, exerciseName, file) ->
 
 addFeedback = (studentName, exerciseName, feedbackText) ->
   studentsToExercises[studentName][exerciseName].feedback = feedbackText
+
+fillAccordionWhenFilesRead = ->
+  setTimeout(
+    () ->
+      window.fillFeedbackAccordionHTML(studentsToExercises)
+    5000
+  )
 
 jQuery(document).ready(($) ->
   readDirectoryOnDrop()

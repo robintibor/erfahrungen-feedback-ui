@@ -1,6 +1,5 @@
 (function() {
-  var createExercisesHTML, createStudentAccordionHTML, fillFeedbackAccordionHTML, getStudentsSortedAlphabetically, showFeedbackAccordion, studentToExercises,
-    __hasProp = {}.hasOwnProperty;
+  var createExercisesHTML, createStudentAccordionHTML, fillFeedbackAccordionHTML, getExercisesSortedAlphabetically, getStudentsSortedAlphabetically, showFeedbackAccordion, studentToExercises;
 
   studentToExercises = {
     jg252: {
@@ -54,27 +53,39 @@
   };
 
   createExercisesHTML = function(studentExercises) {
-    var exerciseHTML, exerciseName, exerciseTexts;
+    var exerciseHTML, exerciseName, exerciseTexts, studentExercisesSorted, _i, _len;
 
     exerciseHTML = "<div>";
-    for (exerciseName in studentExercises) {
-      if (!__hasProp.call(studentExercises, exerciseName)) continue;
+    studentExercisesSorted = getExercisesSortedAlphabetically(studentExercises);
+    for (_i = 0, _len = studentExercisesSorted.length; _i < _len; _i++) {
+      exerciseName = studentExercisesSorted[_i];
       exerciseTexts = studentExercises[exerciseName];
-      exerciseHTML += "    <div class='uebungsblatt-header header'>" + exerciseName + " </div>      <div class='well well-small'>        <div class='well well-small'>          " + exerciseTexts.erfahrungen + "        </div>        <div class='alert alert-success'>          " + exerciseTexts.feedback + "        </div>      </div>";
+      exerciseHTML += "    <div class='uebungsblatt-header header'>" + exerciseName + " </div>      <div class='well well-small'>        <pre class='well well-small'>" + exerciseTexts.erfahrungen + "</pre>        <pre class='alert alert-success'>" + exerciseTexts.feedback + "</pre>      </div>";
     }
     exerciseHTML += "</div>";
     return exerciseHTML;
+  };
+
+  getExercisesSortedAlphabetically = function(studentExercises) {
+    var exercises;
+
+    exercises = Object.keys(studentExercises);
+    exercises.sort();
+    return exercises;
   };
 
   showFeedbackAccordion = function() {
     $("#feedback-accordion").show();
     return $("#feedback-accordion").accordion({
       active: false,
-      collapsible: true
+      collapsible: true,
+      heightStyle: "content"
     });
   };
 
   window.fillFeedbackAccordionHTML = function(studentToExercises) {
+    console.log("filling feedback");
+    console.log("filling feedback with", studentToExercises);
     fillFeedbackAccordionHTML(studentToExercises);
     return showFeedbackAccordion();
   };
