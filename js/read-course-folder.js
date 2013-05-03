@@ -74,7 +74,7 @@
     var studentDirectories;
 
     studentDirectories = jQuery.grep(possibleStudentDirectories, function(possibleDirectory) {
-      return possibleDirectory.name !== "musterloesungen" && possibleDirectory.name !== "vorlesungen" && possibleDirectory.name !== "uebungen" && possibleDirectory.name !== ".svn";
+      return possibleDirectory.name.match(/^[a-z]{2}[0-9]{1,3}$/);
     });
     return studentDirectories;
   };

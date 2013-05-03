@@ -50,10 +50,8 @@ readStudentDirectories = (studentDirectories) ->
 filterForStudentDirectories = (possibleStudentDirectories) ->
   studentDirectories = jQuery.grep(possibleStudentDirectories,
     (possibleDirectory) ->
-      return (possibleDirectory.name != "musterloesungen" and 
-        possibleDirectory.name != "vorlesungen" and
-        possibleDirectory.name != "uebungen" and
-        possibleDirectory.name != ".svn")
+      # studentdirectoryname should be rz-kuerzel like rs123
+      return possibleDirectory.name.match(/^[a-z]{2}[0-9]{1,3}$/)
   )
   return studentDirectories
 
