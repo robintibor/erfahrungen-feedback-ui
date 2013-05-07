@@ -129,6 +129,7 @@ rzKuerzelToFullName = {
   jg225: "Juergen Gutt",
   js542: "Jens Schindler",
   jr76: "Julian Reimer",
+  jr187: "Jan Reisacher",
   kl92: "Karl-Robert Lappe",
   ls305: "Lars Sipos",
   lz33: "Lukas Zimmermann",
