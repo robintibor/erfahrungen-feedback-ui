@@ -1,7 +1,7 @@
 (function() {
   var Group1, Group2, Group3, GroupAll, Groups, countAnswers, createTableGroupSums, sumAnswers;
 
-  Group1 = ["Rechenzentrumskürzel", "mp208", "Alien", "R2D2", "Beratel", "sk163", "mk488", "mk211"];
+  Group1 = ["RechenzentrumskÃ¼rzel", "mp208", "Alien", "R2D2", "Beratel", "sk163", "mk488", "mk211"];
 
   Group2 = ["fb165", "hj22", "sb404", "cs434", "mr252"];
 
@@ -57,7 +57,6 @@
       for (week = _m = 0, _len4 = _ref.length; _m < _len4; week = ++_m) {
         groupLevel = _ref[week];
         groupLevel.average = groupLevel.sum / groupLevel.responses;
-        console.log("grouplevel for week " + week + ":", groupLevel);
       }
     }
     return groupLevels;
