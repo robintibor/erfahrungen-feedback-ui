@@ -59,6 +59,7 @@
       for (week = _m = 0, _len4 = _ref.length; _m < _len4; week = ++_m) {
         groupLevel = _ref[week];
         groupLevel.average = groupLevel.sum / groupLevel.responses;
+        console.log("week " + week + ", groupLevel", groupLevel);
       }
     }
     return groupLevels;

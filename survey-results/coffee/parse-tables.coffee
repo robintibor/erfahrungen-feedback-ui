@@ -40,6 +40,7 @@ createTableGroupSums = (Groups, table, sumAnswersFunction, countAnswerFunction) 
   for studentGroup, groupNr in Groups
     for groupLevel, week in groupLevels[groupNr]
       groupLevel.average = groupLevel.sum / groupLevel.responses
+      console.log("week #{week}, groupLevel", groupLevel);
   
   return groupLevels
 
