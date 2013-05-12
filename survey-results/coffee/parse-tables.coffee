@@ -15,9 +15,6 @@ createTableGroupSums = (Groups, table, sumAnswersFunction, countAnswerFunction) 
     tableThisGroup = $.grep(table,
       (row) ->
         pseudonym = row[6]
-        if (groupNr == 0)
-          console.log("pseudonym", pseudonym)
-          console.log("pseudonym #{pseudonym} in #{studentGroup} = ", $.inArray(pseudonym, studentGroup) != -1)
         return $.inArray(pseudonym, studentGroup) != -1
     )
     groupLevels[groupNr] = []
@@ -40,7 +37,7 @@ createTableGroupSums = (Groups, table, sumAnswersFunction, countAnswerFunction) 
   for studentGroup, groupNr in Groups
     for groupLevel, week in groupLevels[groupNr]
       groupLevel.average = groupLevel.sum / groupLevel.responses
-      console.log("week #{week}, groupLevel", groupLevel);
+      console.log("week #{week}, groupLevel", groupLevel)
   
   return groupLevels
 

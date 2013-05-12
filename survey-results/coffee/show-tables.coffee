@@ -4,43 +4,50 @@
   
 showConfidenceTable = (confidenceLevels) ->
   confidenceTableElem = getConfidenceTableElement()
-  showTable(confidenceTableElem, confidenceLevels)
+  showTable(confidenceTableElem, confidenceLevels, "C++-Programmier-Selbstwirksamkeitserwartungen")
 
-showTable = (tableElem, answerLevels) ->  
-  fillTableElement(tableElem, answerLevels)
-  visualizeTableElement(tableElem)
+showFeelingTable = (feelingLevels) ->
+  feelingTableElem = getFeelingTableElem()
+  showTable(feelingTableElem, feelingLevels, "Wohlfühlfaktor")
 
 getConfidenceTableElement = ->
   return $('#confidenceTable')
   
-fillTableElement = (tableElem, answerLevels) ->
-  addConfidenceHeaders(tableElem)
+getFeelingTableElem = ->
+  return $('#feelingTable')
+
+showTable = (tableElem, answerLevels, tableCaption) ->  
+  fillTableElement(tableElem, answerLevels, tableCaption)
+  visualizeTableElement(tableElem)
+  
+fillTableElement = (tableElem, answerLevels, tableCaption) ->
+  addTableHeaders(tableElem, tableCaption)
   fillData(tableElem, answerLevels)
   
-addConfidenceHeaders = (confidenceTableElem) ->
-  confidenceTableElem.append('
-  <caption>C++-Programmier-Selbstwirksamkeitserwartungen</caption>
+addTableHeaders = (tableElem, tableCaption) ->
+  tableElem.append("
+  <caption>#{tableCaption}</caption>
   <thead>
 		<tr>
 			<td>Woche / <br/> Gruppe</td>
-			<th scope="col">0</th>
-			<th scope="col">2</th>
-			<th scope="col">3</th>
-			<th scope="col">4</th>
+			<th scope='col'>0</th>
+			<th scope='col'>2</th>
+			<th scope='col'>3</th>
+			<th scope='col'>4</th>
 		</tr>
 	</thead>
-  ')
+  ")
 
-fillData = (confidenceTableElem, confidenceLevels) ->
-  tableBodyHTML = createTableBodyHTML(confidenceLevels)
-  confidenceTableElem.append(tableBodyHTML)
+fillData = (tableElem, answerLevels) ->
+  tableBodyHTML = createTableBodyHTML(answerLevels)
+  tableElem.append(tableBodyHTML)
   
-createTableBodyHTML = (confidenceLevels) ->
+createTableBodyHTML = (answerLevels) ->
   tableBodyHTML = '<tbody>'
-  for weeks, groupNr in confidenceLevels
+  for weeks, groupNr in answerLevels
     tableBodyHTML += "<tr><th scope='row'> #{getGroupName(groupNr)}</th>"
-    for confidenceLevel in weeks
-      tableBodyHTML += "<td>#{confidenceLevel.average.toFixed(2)}</td>"
+    for answerLevel in weeks
+      tableBodyHTML += "<td>#{answerLevel.average.toFixed(2)}</td>"
     tableBodyHTML += "</tr>"
   tableBodyHTML += '</tbody>'
   return tableBodyHTML

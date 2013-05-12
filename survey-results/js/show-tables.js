@@ -1,5 +1,5 @@
 (function() {
-  var addConfidenceHeaders, createTableBodyHTML, fillData, fillTableElement, getConfidenceTableElement, getGroupName, showConfidenceTable, showTable, visualizeTableElement;
+  var addTableHeaders, createTableBodyHTML, fillData, fillTableElement, getConfidenceTableElement, getFeelingTableElem, getGroupName, showConfidenceTable, showFeelingTable, showTable, visualizeTableElement;
 
   this.showTables = function(confidenceLevels, feelingLevels) {
     showConfidenceTable(confidenceLevels);
@@ -10,55 +10,55 @@
     var confidenceTableElem;
 
     confidenceTableElem = getConfidenceTableElement();
-    return showTable(confidenceTableElem, confidenceLevels);
+    return showTable(confidenceTableElem, confidenceLevels, "C++-Programmier-Selbstwirksamkeitserwartungen");
   };
 
-  showTable = function(tableElem, answerLevels) {
-    fillTableElement(tableElem, answerLevels);
-    return visualizeTableElement(tableElem);
+  showFeelingTable = function(feelingLevels) {
+    var feelingTableElem;
+
+    feelingTableElem = getFeelingTableElem();
+    return showTable(feelingTableElem, feelingLevels, "Wohlfühlfaktor");
   };
 
   getConfidenceTableElement = function() {
     return $('#confidenceTable');
   };
 
-  fillTableElement = function(tableElem, answerLevels) {
-    addConfidenceHeaders(tableElem);
+  getFeelingTableElem = function() {
+    return $('#feelingTable');
+  };
+
+  showTable = function(tableElem, answerLevels, tableCaption) {
+    fillTableElement(tableElem, answerLevels, tableCaption);
+    return visualizeTableElement(tableElem);
+  };
+
+  fillTableElement = function(tableElem, answerLevels, tableCaption) {
+    addTableHeaders(tableElem, tableCaption);
     return fillData(tableElem, answerLevels);
   };
 
-  addConfidenceHeaders = function(confidenceTableElem) {
-    return confidenceTableElem.append('\
-  <caption>C++-Programmier-Selbstwirksamkeitserwartungen</caption>\
-  <thead>\
-		<tr>\
-			<td>Woche / <br/> Gruppe</td>\
-			<th scope="col">0</th>\
-			<th scope="col">2</th>\
-			<th scope="col">3</th>\
-			<th scope="col">4</th>\
-		</tr>\
-	</thead>\
-  ');
+  addTableHeaders = function(tableElem, tableCaption) {
+    return tableElem.append("  <caption>" + tableCaption + "</caption>  <thead>		<tr>			<td>Woche / <br/> Gruppe</td>			<th scope='col'>0</th>			<th scope='col'>2</th>			<th scope='col'>3</th>			<th scope='col'>4</th>		</tr>	</thead>  ");
   };
 
-  fillData = function(confidenceTableElem, confidenceLevels) {
+  fillData = function(tableElem, answerLevels) {
     var tableBodyHTML;
 
-    tableBodyHTML = createTableBodyHTML(confidenceLevels);
-    return confidenceTableElem.append(tableBodyHTML);
+    tableBodyHTML = createTableBodyHTML(answerLevels);
+    return tableElem.append(tableBodyHTML);
   };
 
-  createTableBodyHTML = function(confidenceLevels) {
-    var confidenceLevel, groupNr, tableBodyHTML, weeks, _i, _j, _len, _len1;
+  createTableBodyHTML = function(answerLevels) {
+    var answerLevel, groupNr, tableBodyHTML, weeks, _i, _j, _len, _len1;
 
     tableBodyHTML = '<tbody>';
-    for (groupNr = _i = 0, _len = confidenceLevels.length; _i < _len; groupNr = ++_i) {
-      weeks = confidenceLevels[groupNr];
+    for (groupNr = _i = 0, _len = answerLevels.length; _i < _len; groupNr = ++_i) {
+      weeks = answerLevels[groupNr];
       tableBodyHTML += "<tr><th scope='row'> " + (getGroupName(groupNr)) + "</th>";
       for (_j = 0, _len1 = weeks.length; _j < _len1; _j++) {
-        confidenceLevel = weeks[_j];
-        tableBodyHTML += "<td>" + (confidenceLevel.average.toFixed(2)) + "</td>";
+        answerLevel = weeks[_j];
+        tableBodyHTML += "<td>" + (answerLevel.average.toFixed(2)) + "</td>";
       }
       tableBodyHTML += "</tr>";
     }
