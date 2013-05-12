@@ -68,7 +68,7 @@
       tableBodyHTML += "<tr><th scope='row'> " + (getGroupName(groupNr)) + "</th>";
       for (_j = 0, _len1 = weeks.length; _j < _len1; _j++) {
         answerLevel = weeks[_j];
-        tableBodyHTML += "<td>" + (answerLevel.average.toFixed(2)) + "</td>";
+        tableBodyHTML += "<td>" + (answerLevel.average.toFixed(2)) + " (" + answerLevel.students + ")</td>";
       }
       tableBodyHTML += "</tr>";
     }

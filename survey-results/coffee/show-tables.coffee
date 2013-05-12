@@ -48,7 +48,7 @@ createTableBodyHTML = (answerLevels) ->
   for weeks, groupNr in answerLevels
     tableBodyHTML += "<tr><th scope='row'> #{getGroupName(groupNr)}</th>"
     for answerLevel in weeks
-      tableBodyHTML += "<td>#{answerLevel.average.toFixed(2)}</td>"
+      tableBodyHTML += "<td>#{answerLevel.average.toFixed(2)} (#{answerLevel.students})</td>"
     tableBodyHTML += "</tr>"
   tableBodyHTML += '</tbody>'
   return tableBodyHTML
