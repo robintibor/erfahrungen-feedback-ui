@@ -1,3 +1,13 @@
 caption {
   padding: 10px;
 }
+
+pre.well-small {
+  word-break: normal;
+  word-wrap: normal;
+  font-family: Arial;
+  width: 70%;
+}
+#erfahrungen {
+  padding-left: 50px;
+}
