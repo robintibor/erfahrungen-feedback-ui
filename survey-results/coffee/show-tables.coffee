@@ -1,20 +1,23 @@
 @showTables = (confidenceLevels, feelingLevels) ->
   showConfidenceTable(confidenceLevels)
-  #showFeelingTable(feelingLevels)
+  showFeelingTable(feelingLevels)
   
 showConfidenceTable = (confidenceLevels) ->
   confidenceTableElem = getConfidenceTableElement()
-  fillConfidenceTableElement(confidenceTableElem, confidenceLevels)
+  showTable(confidenceTableElem, confidenceLevels)
+
+showTable = (tableElem, answerLevels) ->  
+  fillTableElement(tableElem, answerLevels)
+  visualizeTableElement(tableElem)
 
 getConfidenceTableElement = ->
   return $('#confidenceTable')
   
-fillConfidenceTableElement = (confidenceTableElem, confidenceLevels) ->
-  addConfidenceHeaders(confidenceTableElem)
-  fillData(confidenceTableElem, confidenceLevels)
+fillTableElement = (tableElem, answerLevels) ->
+  addConfidenceHeaders(tableElem)
+  fillData(tableElem, answerLevels)
   
 addConfidenceHeaders = (confidenceTableElem) ->
-  console.log("add headers to ", confidenceTableElem)
   confidenceTableElem.append('
   <caption>C++-Programmier-Selbstwirksamkeitserwartungen</caption>
   <thead>
@@ -34,12 +37,25 @@ fillData = (confidenceTableElem, confidenceLevels) ->
   
 createTableBodyHTML = (confidenceLevels) ->
   tableBodyHTML = '<tbody>'
-  for week, groupNr in confidenceLevels
-    tableBodyHTML += "<tr><td> #{groupNr}</td>"
+  for weeks, groupNr in confidenceLevels
+    tableBodyHTML += "<tr><th scope='row'> #{getGroupName(groupNr)}</th>"
+    for confidenceLevel in weeks
+      console.log("confidenceLevel", confidenceLevel)
+      console.log("confidenceLevelAverage", confidenceLevel.average)
+      tableBodyHTML += "<td>#{confidenceLevel.average.toFixed(2)}</td>"
     console.log("groupNr", groupNr)
-    console.log("week", week)
     tableBodyHTML += "</tr>"
   tableBodyHTML += '</tbody>'
   return tableBodyHTML
 
+getGroupName = (groupNr) ->
+  switch groupNr
+    when 0 then "Alle"
+    when 1 then "1 (TDD, -, PP)"
+    when 2 then "2 (PP, TDD, -)"
+    when 3 then "3 (-, PP, TDD)"
+
+visualizeTableElement = (tableElem) ->
+  tableElem.visualize({type: 'line', width: '600px'})
+  
 

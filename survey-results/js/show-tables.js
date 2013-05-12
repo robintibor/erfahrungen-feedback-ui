@@ -1,28 +1,33 @@
 (function() {
-  var addConfidenceHeaders, createTableBodyHTML, fillConfidenceTableElement, fillData, getConfidenceTableElement, showConfidenceTable;
+  var addConfidenceHeaders, createTableBodyHTML, fillData, fillTableElement, getConfidenceTableElement, getGroupName, showConfidenceTable, showTable, visualizeTableElement;
 
   this.showTables = function(confidenceLevels, feelingLevels) {
-    return showConfidenceTable(confidenceLevels);
+    showConfidenceTable(confidenceLevels);
+    return showFeelingTable(feelingLevels);
   };
 
   showConfidenceTable = function(confidenceLevels) {
     var confidenceTableElem;
 
     confidenceTableElem = getConfidenceTableElement();
-    return fillConfidenceTableElement(confidenceTableElem, confidenceLevels);
+    return showTable(confidenceTableElem, confidenceLevels);
+  };
+
+  showTable = function(tableElem, answerLevels) {
+    fillTableElement(tableElem, answerLevels);
+    return visualizeTableElement(tableElem);
   };
 
   getConfidenceTableElement = function() {
     return $('#confidenceTable');
   };
 
-  fillConfidenceTableElement = function(confidenceTableElem, confidenceLevels) {
-    addConfidenceHeaders(confidenceTableElem);
-    return fillData(confidenceTableElem, confidenceLevels);
+  fillTableElement = function(tableElem, answerLevels) {
+    addConfidenceHeaders(tableElem);
+    return fillData(tableElem, answerLevels);
   };
 
   addConfidenceHeaders = function(confidenceTableElem) {
-    console.log("add headers to ", confidenceTableElem);
     return confidenceTableElem.append('\
   <caption>C++-Programmier-Selbstwirksamkeitserwartungen</caption>\
   <thead>\
@@ -45,18 +50,43 @@
   };
 
   createTableBodyHTML = function(confidenceLevels) {
-    var groupNr, tableBodyHTML, week, _i, _len;
+    var confidenceLevel, groupNr, tableBodyHTML, weeks, _i, _j, _len, _len1;
 
     tableBodyHTML = '<tbody>';
     for (groupNr = _i = 0, _len = confidenceLevels.length; _i < _len; groupNr = ++_i) {
-      week = confidenceLevels[groupNr];
-      tableBodyHTML += "<tr><td> " + groupNr + "</td>";
+      weeks = confidenceLevels[groupNr];
+      tableBodyHTML += "<tr><th scope='row'> " + (getGroupName(groupNr)) + "</th>";
+      for (_j = 0, _len1 = weeks.length; _j < _len1; _j++) {
+        confidenceLevel = weeks[_j];
+        console.log("confidenceLevel", confidenceLevel);
+        console.log("confidenceLevelAverage", confidenceLevel.average);
+        tableBodyHTML += "<td>" + (confidenceLevel.average.toFixed(2)) + "</td>";
+      }
       console.log("groupNr", groupNr);
-      console.log("week", week);
       tableBodyHTML += "</tr>";
     }
     tableBodyHTML += '</tbody>';
     return tableBodyHTML;
+  };
+
+  getGroupName = function(groupNr) {
+    switch (groupNr) {
+      case 0:
+        return "Alle";
+      case 1:
+        return "1 (TDD, -, PP)";
+      case 2:
+        return "2 (PP, TDD, -)";
+      case 3:
+        return "3 (-, PP, TDD)";
+    }
+  };
+
+  visualizeTableElement = function(tableElem) {
+    return tableElem.visualize({
+      type: 'line',
+      width: '600px'
+    });
   };
 
 }).call(this);
