@@ -78,7 +78,7 @@ readExerciseDirectory = (studentName, exerciseName, entries) ->
   addErfahrungenForThisExercise = addPropertyFile.bind(this, studentName, exerciseName, "erfahrungen")
   addFeedbackForThisExercise = addPropertyFile.bind(this, studentName, exerciseName, "feedback")
   for entry in entries
-    if entry.name.match(/^[Ee]rfahrung(en){0,1}\.txt$/)
+    if entry.name.match(/^[Ee]rfahrung(en){0,1}(sbericht){0,1}\.txt$/)
       entry.file(addErfahrungenForThisExercise, errorHandler)
     else if entry.name.match(/^[fF]eedback-tutor\.txt$/)
       entry.file(addFeedbackForThisExercise, errorHandler)

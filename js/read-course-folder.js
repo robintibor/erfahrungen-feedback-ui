@@ -114,7 +114,7 @@
     _results = [];
     for (_i = 0, _len = entries.length; _i < _len; _i++) {
       entry = entries[_i];
-      if (entry.name.match(/^[Ee]rfahrung(en){0,1}\.txt$/)) {
+      if (entry.name.match(/^[Ee]rfahrung(en){0,1}(sbericht){0,1}\.txt$/)) {
         _results.push(entry.file(addErfahrungenForThisExercise, errorHandler));
       } else if (entry.name.match(/^[fF]eedback-tutor\.txt$/)) {
         _results.push(entry.file(addFeedbackForThisExercise, errorHandler));
