@@ -1,5 +1,5 @@
 # TDD - nada - PP
-Group1 = ["RechenzentrumskÃ¼rzel", "mp208", "Alien", "R2D2", "Beratel", "sk163", "mk488", "mk211"]
+Group1 = ["Rechenzentrumskürzel", "mp208", "Alien", "R2D2", "Beratel", "sk163", "mk488", "mk211"]
 # PP - TDD - nada
 Group2 = ["fb165", "hj22", "sb404", "cs434", "mr252"]
 # nada - PP - TDD
