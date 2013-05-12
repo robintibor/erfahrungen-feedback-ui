@@ -2,7 +2,7 @@ caption {
   padding: 10px;
 }
 
-pre.well-small {
+pre.well-small, pre.alert-success {
   word-break: normal;
   word-wrap: normal;
   font-family: Arial;
