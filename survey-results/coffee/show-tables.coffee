@@ -31,7 +31,7 @@ addTableHeaders = (tableElem, tableCaption, weeks) ->
   <caption>#{tableCaption}</caption>
   <thead>
   	<tr>
-  	<td>Woche / <br/> Gruppe</td>"
+  	<td>Ende von Woche / <br/> Gruppe</td>"
   for week in weeks
     tableHeaders += "<th scope='col'>#{week}</th>"
   tableHeaders +="

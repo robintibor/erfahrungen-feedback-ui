@@ -43,7 +43,7 @@
   addTableHeaders = function(tableElem, tableCaption, weeks) {
     var tableHeaders, week, _i, _len;
 
-    tableHeaders = "  <caption>" + tableCaption + "</caption>  <thead>  	<tr>  	<td>Woche / <br/> Gruppe</td>";
+    tableHeaders = "  <caption>" + tableCaption + "</caption>  <thead>  	<tr>  	<td>Ende von Woche / <br/> Gruppe</td>";
     for (_i = 0, _len = weeks.length; _i < _len; _i++) {
       week = weeks[_i];
       tableHeaders += "<th scope='col'>" + week + "</th>";
