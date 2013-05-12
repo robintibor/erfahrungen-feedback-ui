@@ -4,11 +4,13 @@
   
 showConfidenceTable = (confidenceLevels) ->
   confidenceTableElem = getConfidenceTableElement()
-  showTable(confidenceTableElem, confidenceLevels, "C++-Programmier-Selbstwirksamkeitserwartungen")
+  surveyWeeks = [0, 2, 3, 4]
+  showTable(confidenceTableElem, confidenceLevels, "C++-Programmier-Selbstwirksamkeitserwartungen", surveyWeeks)
 
 showFeelingTable = (feelingLevels) ->
   feelingTableElem = getFeelingTableElem()
-  showTable(feelingTableElem, feelingLevels, "Wohlfühlfaktor")
+  surveyWeeks = [2, 3, 4]
+  showTable(feelingTableElem, feelingLevels, "Wohlfühlfaktor", surveyWeeks)
 
 getConfidenceTableElement = ->
   return $('#confidenceTable')
@@ -16,27 +18,26 @@ getConfidenceTableElement = ->
 getFeelingTableElem = ->
   return $('#feelingTable')
 
-showTable = (tableElem, answerLevels, tableCaption) ->  
-  fillTableElement(tableElem, answerLevels, tableCaption)
+showTable = (tableElem, answerLevels, tableCaption, weeks) ->  
+  fillTableElement(tableElem, answerLevels, tableCaption, weeks)
   visualizeTableElement(tableElem)
   
-fillTableElement = (tableElem, answerLevels, tableCaption) ->
-  addTableHeaders(tableElem, tableCaption)
+fillTableElement = (tableElem, answerLevels, tableCaption, weeks) ->
+  addTableHeaders(tableElem, tableCaption, weeks)
   fillData(tableElem, answerLevels)
   
-addTableHeaders = (tableElem, tableCaption) ->
-  tableElem.append("
+addTableHeaders = (tableElem, tableCaption, weeks) ->
+  tableHeaders = "
   <caption>#{tableCaption}</caption>
   <thead>
-		<tr>
-			<td>Woche / <br/> Gruppe</td>
-			<th scope='col'>0</th>
-			<th scope='col'>2</th>
-			<th scope='col'>3</th>
-			<th scope='col'>4</th>
-		</tr>
-	</thead>
-  ")
+  	<tr>
+  	<td>Woche / <br/> Gruppe</td>"
+  for week in weeks
+    tableHeaders += "<th scope='col'>#{week}</th>"
+  tableHeaders +="
+  	</tr>
+	</thead>"
+  tableElem.append(tableHeaders)
 
 fillData = (tableElem, answerLevels) ->
   tableBodyHTML = createTableBodyHTML(answerLevels)

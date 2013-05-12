@@ -7,17 +7,19 @@
   };
 
   showConfidenceTable = function(confidenceLevels) {
-    var confidenceTableElem;
+    var confidenceTableElem, surveyWeeks;
 
     confidenceTableElem = getConfidenceTableElement();
-    return showTable(confidenceTableElem, confidenceLevels, "C++-Programmier-Selbstwirksamkeitserwartungen");
+    surveyWeeks = [0, 2, 3, 4];
+    return showTable(confidenceTableElem, confidenceLevels, "C++-Programmier-Selbstwirksamkeitserwartungen", surveyWeeks);
   };
 
   showFeelingTable = function(feelingLevels) {
-    var feelingTableElem;
+    var feelingTableElem, surveyWeeks;
 
     feelingTableElem = getFeelingTableElem();
-    return showTable(feelingTableElem, feelingLevels, "Wohlfühlfaktor");
+    surveyWeeks = [2, 3, 4];
+    return showTable(feelingTableElem, feelingLevels, "Wohlfühlfaktor", surveyWeeks);
   };
 
   getConfidenceTableElement = function() {
@@ -28,18 +30,26 @@
     return $('#feelingTable');
   };
 
-  showTable = function(tableElem, answerLevels, tableCaption) {
-    fillTableElement(tableElem, answerLevels, tableCaption);
+  showTable = function(tableElem, answerLevels, tableCaption, weeks) {
+    fillTableElement(tableElem, answerLevels, tableCaption, weeks);
     return visualizeTableElement(tableElem);
   };
 
-  fillTableElement = function(tableElem, answerLevels, tableCaption) {
-    addTableHeaders(tableElem, tableCaption);
+  fillTableElement = function(tableElem, answerLevels, tableCaption, weeks) {
+    addTableHeaders(tableElem, tableCaption, weeks);
     return fillData(tableElem, answerLevels);
   };
 
-  addTableHeaders = function(tableElem, tableCaption) {
-    return tableElem.append("  <caption>" + tableCaption + "</caption>  <thead>		<tr>			<td>Woche / <br/> Gruppe</td>			<th scope='col'>0</th>			<th scope='col'>2</th>			<th scope='col'>3</th>			<th scope='col'>4</th>		</tr>	</thead>  ");
+  addTableHeaders = function(tableElem, tableCaption, weeks) {
+    var tableHeaders, week, _i, _len;
+
+    tableHeaders = "  <caption>" + tableCaption + "</caption>  <thead>  	<tr>  	<td>Woche / <br/> Gruppe</td>";
+    for (_i = 0, _len = weeks.length; _i < _len; _i++) {
+      week = weeks[_i];
+      tableHeaders += "<th scope='col'>" + week + "</th>";
+    }
+    tableHeaders += "  	</tr>	</thead>";
+    return tableElem.append(tableHeaders);
   };
 
   fillData = function(tableElem, answerLevels) {
