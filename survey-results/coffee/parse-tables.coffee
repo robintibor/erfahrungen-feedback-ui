@@ -15,6 +15,7 @@ createTableGroupSums = (Groups, table, sumAnswersFunction, countAnswerFunction) 
     tableThisGroup = $.grep(table,
       (row) ->
         pseudonym = row[6]
+        console.log("pseudonym", pseudonym)
         return $.inArray(pseudonym, studentGroup) != -1
     )
     groupLevels[groupNr] = []

@@ -21,6 +21,7 @@
         var pseudonym;
 
         pseudonym = row[6];
+        console.log("pseudonym", pseudonym);
         return $.inArray(pseudonym, studentGroup) !== -1;
       });
       groupLevels[groupNr] = [];

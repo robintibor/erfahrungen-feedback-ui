@@ -58,11 +58,8 @@
       tableBodyHTML += "<tr><th scope='row'> " + (getGroupName(groupNr)) + "</th>";
       for (_j = 0, _len1 = weeks.length; _j < _len1; _j++) {
         confidenceLevel = weeks[_j];
-        console.log("confidenceLevel", confidenceLevel);
-        console.log("confidenceLevelAverage", confidenceLevel.average);
         tableBodyHTML += "<td>" + (confidenceLevel.average.toFixed(2)) + "</td>";
       }
-      console.log("groupNr", groupNr);
       tableBodyHTML += "</tr>";
     }
     tableBodyHTML += '</tbody>';

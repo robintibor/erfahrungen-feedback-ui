@@ -40,10 +40,7 @@ createTableBodyHTML = (confidenceLevels) ->
   for weeks, groupNr in confidenceLevels
     tableBodyHTML += "<tr><th scope='row'> #{getGroupName(groupNr)}</th>"
     for confidenceLevel in weeks
-      console.log("confidenceLevel", confidenceLevel)
-      console.log("confidenceLevelAverage", confidenceLevel.average)
       tableBodyHTML += "<td>#{confidenceLevel.average.toFixed(2)}</td>"
-    console.log("groupNr", groupNr)
     tableBodyHTML += "</tr>"
   tableBodyHTML += '</tbody>'
   return tableBodyHTML
