@@ -11,3 +11,18 @@ pre.well-small, pre.alert-success {
 #erfahrungen {
   padding-left: 50px;
 }
+#studentTables h1 {
+  margin-left:40px;
+}
+
+#studentTables table {
+  width: 1000px;
+}
+
+#studentTables td {
+  text-align:left;
+}
+
+#studentTables td:nth-child(even) {
+  background-color: #CCC;
+}

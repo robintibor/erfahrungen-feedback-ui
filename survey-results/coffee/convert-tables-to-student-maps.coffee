@@ -1,10 +1,9 @@
-#date.getDate() + "." + (date.getMonth() + 1) + ".(" + date.getHours() + ":" + date.getMinutes() + ")"
 # TDD - nada - PP
-Group1 = ["Rechenzentrumskürzel", "mp208", "Alien", "R2D2", "Beratel", "sk163", "mk488", "mk211"]
+Group1 = ["Alien", "Beratel", "lz33", "mk211", "mk488", "mp208", "R2D2", "Rechenzentrumskürzel", "sk163"]
 # PP - TDD - nada
-Group2 = ["fb165", "hj22", "sb404", "cs434", "mr252"]
+Group2 = ["cs434", "fb165", "hj22", "mr252", "sb404"]
 # nada - PP - TDD
-Group3 = ["Alien", "mz70", "js542", "bh102", "mp121"]
+Group3 = ["Alien", "bh102", "ck76", "js542", "mp121", "mz70"]
 
 GroupAll = Group1.concat(Group2).concat(Group3)
 
@@ -12,17 +11,17 @@ Groups = [GroupAll, Group1, Group2, Group3]
 
 @convertTablesToGroupLevels = (tables) ->
   studentsToTables = convertTablesToStudentMaps (tables)
-  vertrauenLevels = getGroupLevels(studentsToTables, "programmierVertrauen", Groups)
-  wohlfuehlLevels = getGroupLevels(studentsToTables, "wohlfuehlFaktor", Groups)
+  vertrauenLevels = getGroupLevels(studentsToTables.programmierVertrauen, Groups)
+  wohlfuehlLevels = getGroupLevels(studentsToTables.wohlfuehlFaktor, Groups)
   return {programmierVertrauen: vertrauenLevels, wohlfuehlFaktor: wohlfuehlLevels}  
   
-getGroupLevels = (studentsToTables, surveyName, groups) ->
+getGroupLevels = (studentsToResponses, groups) ->
   # go through all students sum up answers, at the end make average
   groupLevels = []
   for studentGroup, groupNr in groups
     groupLevels[groupNr] = []
     for student in studentGroup
-      studentAnswers = studentsToTables[student][surveyName]
+      studentAnswers = studentsToResponses[student]
       for answer, week in studentAnswers
         if (not groupLevels[groupNr][week])
           groupLevels[groupNr][week] = {sum: 0, responses: 0, students: 0, averagesSum: 0}
@@ -38,22 +37,21 @@ getGroupLevels = (studentsToTables, surveyName, groups) ->
 
 @convertTablesToStudentMaps = (tables) ->
   studentsToTables = {}
-  console.log(tables)
   addTableToStudentMap(tables.programmierVertrauen, "programmierVertrauen", studentsToTables)
   addTableToStudentMap(tables.wohlfuehlFaktor, "wohlfuehlFaktor", studentsToTables)
-  console.log(studentsToTables)
   return studentsToTables
   
 addTableToStudentMap = (table, surveyName, studentsToTables) ->
+  studentsToTables[surveyName] = {}
   for row in table.responses
-    addRowToStudentMap(row, surveyName, studentsToTables)
+    addRowToStudentMap(row, studentsToTables[surveyName])
 
-addRowToStudentMap = (row, surveyName, studentsToTables) ->
+addRowToStudentMap = (row, studentsToResponsesThisSurvey) ->
   studentName = getStudentNameFromRow(row)
   date = getDateFromRow(row)
   sumOfAnswers = getSumFromRow(row)
   numberOfAnswers = getNumberOfAnswersFromRow(row)
-  addStudentAnswerToStudentMap(studentName, date, sumOfAnswers, numberOfAnswers, surveyName, studentsToTables)
+  addStudentAnswerToStudentMap(studentName, date, sumOfAnswers, numberOfAnswers, studentsToResponsesThisSurvey)
   
 getStudentNameFromRow = (row) ->
   # student name should be at 7th position for all surveys ! :)
@@ -71,10 +69,8 @@ getSumFromRow = (row) ->
 getNumberOfAnswersFromRow = (row) ->
   return row[7..].filter((response) -> typeof response == "number").length
 
-addStudentAnswerToStudentMap = (studentName, date, sumOfAnswers, numberOfAnswers, surveyName, studentsToTables) ->
-  if (not studentsToTables[studentName]?)
-    studentsToTables[studentName] = {}
-  if (not studentsToTables[studentName][surveyName]?)
-    studentsToTables[studentName][surveyName] = []
+addStudentAnswerToStudentMap = (studentName, date, sumOfAnswers, numberOfAnswers, studentsToResponsesThisSurvey) ->
+  if (not studentsToResponsesThisSurvey[studentName]?)
+    studentsToResponsesThisSurvey[studentName] = []
   studentAnswer = {date: date, sum: sumOfAnswers, responses: numberOfAnswers, average: sumOfAnswers / numberOfAnswers}
-  studentsToTables[studentName][surveyName].push(studentAnswer)
+  studentsToResponsesThisSurvey[studentName].push(studentAnswer)
