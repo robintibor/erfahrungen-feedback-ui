@@ -1,9 +1,9 @@
 (function() {
   var addTableHeaders, createTableBodyHTML, fillData, fillTableElement, getConfidenceTableElement, getFeelingTableElem, getGroupName, showConfidenceTable, showFeelingTable, showTable, visualizeTableElement;
 
-  this.showTables = function(confidenceLevels, feelingLevels) {
-    showConfidenceTable(confidenceLevels);
-    return showFeelingTable(feelingLevels);
+  this.showTables = function(groupLevels) {
+    showConfidenceTable(groupLevels.programmierVertrauen);
+    return showFeelingTable(groupLevels.wohlfuehlFaktor);
   };
 
   showConfidenceTable = function(confidenceLevels) {

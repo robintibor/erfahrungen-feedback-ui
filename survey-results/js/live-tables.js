@@ -4,8 +4,10 @@
     cache: false,
     dataType: 'jsonp',
     success: function(tables) {
-      console.log("tables", tables);
-      return parseAndShowTables(tables);
+      var groupLevels;
+
+      groupLevels = convertTablesToGroupLevels(tables);
+      return showTables(groupLevels);
     }
   });
 

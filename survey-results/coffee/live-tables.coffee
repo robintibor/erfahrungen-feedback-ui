@@ -3,6 +3,6 @@ $.ajax({
   cache: false,
   dataType: 'jsonp',
   success: (tables) ->
-    console.log("tables", tables)
-    parseAndShowTables(tables)
+    groupLevels = convertTablesToGroupLevels(tables)
+    showTables(groupLevels)
 });

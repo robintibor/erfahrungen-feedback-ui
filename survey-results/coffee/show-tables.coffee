@@ -1,6 +1,6 @@
-@showTables = (confidenceLevels, feelingLevels) ->
-  showConfidenceTable(confidenceLevels)
-  showFeelingTable(feelingLevels)
+@showTables = (groupLevels) ->
+  showConfidenceTable(groupLevels.programmierVertrauen)
+  showFeelingTable(groupLevels.wohlfuehlFaktor)
   
 showConfidenceTable = (confidenceLevels) ->
   confidenceTableElem = getConfidenceTableElement()
