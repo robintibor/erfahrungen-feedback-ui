@@ -3,6 +3,8 @@ $.ajax({
   cache: false,
   dataType: 'jsonp',
   success: (tables) ->
+    studentTables = convertTablesToStudentMaps(tables)
     groupLevels = convertTablesToGroupLevels(tables)
+    showStudentTables(studentTables)
     showTables(groupLevels)
 });

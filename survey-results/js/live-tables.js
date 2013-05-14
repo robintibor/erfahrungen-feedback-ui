@@ -4,9 +4,11 @@
     cache: false,
     dataType: 'jsonp',
     success: function(tables) {
-      var groupLevels;
+      var groupLevels, studentTables;
 
+      studentTables = convertTablesToStudentMaps(tables);
       groupLevels = convertTablesToGroupLevels(tables);
+      showStudentTables(studentTables);
       return showTables(groupLevels);
     }
   });
