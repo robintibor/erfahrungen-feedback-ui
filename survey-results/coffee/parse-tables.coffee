@@ -3,7 +3,7 @@ Group1 = ["Rechenzentrumskürzel", "mp208", "Alien", "R2D2", "Beratel", "sk163",
 # PP - TDD - nada
 Group2 = ["fb165", "hj22", "sb404", "cs434", "mr252"]
 # nada - PP - TDD
-Group3 = ["Alien", "mz70", "js542", "bh102"]
+Group3 = ["Alien", "mz70", "js542", "bh102", "mp121"]
 
 GroupAll = Group1.concat(Group2).concat(Group3)
 
@@ -37,7 +37,6 @@ createTableGroupSums = (Groups, table, sumAnswersFunction, countAnswerFunction) 
   for studentGroup, groupNr in Groups
     for groupLevel, week in groupLevels[groupNr]
       groupLevel.average = groupLevel.sum / groupLevel.responses
-      console.log("week #{week}, groupLevel", groupLevel)
   
   return groupLevels
 

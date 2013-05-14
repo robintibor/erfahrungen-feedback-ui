@@ -5,7 +5,7 @@
 
   Group2 = ["fb165", "hj22", "sb404", "cs434", "mr252"];
 
-  Group3 = ["Alien", "mz70", "js542", "bh102"];
+  Group3 = ["Alien", "mz70", "js542", "bh102", "mp121"];
 
   GroupAll = Group1.concat(Group2).concat(Group3);
 
@@ -55,7 +55,6 @@
       for (week = _m = 0, _len4 = _ref.length; _m < _len4; week = ++_m) {
         groupLevel = _ref[week];
         groupLevel.average = groupLevel.sum / groupLevel.responses;
-        console.log("week " + week + ", groupLevel", groupLevel);
       }
     }
     return groupLevels;
