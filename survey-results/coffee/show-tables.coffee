@@ -5,12 +5,14 @@
 showConfidenceTable = (confidenceLevels) ->
   confidenceTableElem = getConfidenceTableElement()
   surveyWeeks = [0, 2, 3, 4]
-  showTable(confidenceTableElem, confidenceLevels, "C++-Programmier-Selbstwirksamkeitserwartungen", surveyWeeks)
+  topValue = 7
+  showTable(confidenceTableElem, confidenceLevels, "C++-Programmier-Selbstwirksamkeitserwartungen", surveyWeeks, topValue)
 
 showFeelingTable = (feelingLevels) ->
   feelingTableElem = getFeelingTableElem()
   surveyWeeks = [2, 3, 4]
-  showTable(feelingTableElem, feelingLevels, "Wohlfühlfaktor", surveyWeeks)
+  topValue = 5
+  showTable(feelingTableElem, feelingLevels, "Wohlfühlfaktor", surveyWeeks, topValue)
 
 getConfidenceTableElement = ->
   return $('#confidenceTable')
@@ -18,9 +20,9 @@ getConfidenceTableElement = ->
 getFeelingTableElem = ->
   return $('#feelingTable')
 
-showTable = (tableElem, answerLevels, tableCaption, weeks) ->  
+showTable = (tableElem, answerLevels, tableCaption, weeks, topValue) ->  
   fillTableElement(tableElem, answerLevels, tableCaption, weeks)
-  visualizeTableElement(tableElem)
+  visualizeTableElement(tableElem, topValue)
   
 fillTableElement = (tableElem, answerLevels, tableCaption, weeks) ->
   addTableHeaders(tableElem, tableCaption, weeks)
@@ -60,7 +62,14 @@ getGroupName = (groupNr) ->
     when 2 then "2 (PP, TDD, -)"
     when 3 then "3 (-, PP, TDD)"
 
-visualizeTableElement = (tableElem) ->
-  tableElem.visualize({type: 'line', width: '600px'})
+visualizeTableElement = (tableElem, topValue) ->
+  tableElem.visualize(
+    {
+      type: 'line', 
+      width: '600px',
+      bottomValue: 1,
+      topValue: topValue
+    }
+  )
   
 

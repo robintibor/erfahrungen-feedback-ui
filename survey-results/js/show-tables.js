@@ -7,19 +7,21 @@
   };
 
   showConfidenceTable = function(confidenceLevels) {
-    var confidenceTableElem, surveyWeeks;
+    var confidenceTableElem, surveyWeeks, topValue;
 
     confidenceTableElem = getConfidenceTableElement();
     surveyWeeks = [0, 2, 3, 4];
-    return showTable(confidenceTableElem, confidenceLevels, "C++-Programmier-Selbstwirksamkeitserwartungen", surveyWeeks);
+    topValue = 7;
+    return showTable(confidenceTableElem, confidenceLevels, "C++-Programmier-Selbstwirksamkeitserwartungen", surveyWeeks, topValue);
   };
 
   showFeelingTable = function(feelingLevels) {
-    var feelingTableElem, surveyWeeks;
+    var feelingTableElem, surveyWeeks, topValue;
 
     feelingTableElem = getFeelingTableElem();
     surveyWeeks = [2, 3, 4];
-    return showTable(feelingTableElem, feelingLevels, "Wohlfühlfaktor", surveyWeeks);
+    topValue = 5;
+    return showTable(feelingTableElem, feelingLevels, "Wohlfühlfaktor", surveyWeeks, topValue);
   };
 
   getConfidenceTableElement = function() {
@@ -30,9 +32,9 @@
     return $('#feelingTable');
   };
 
-  showTable = function(tableElem, answerLevels, tableCaption, weeks) {
+  showTable = function(tableElem, answerLevels, tableCaption, weeks, topValue) {
     fillTableElement(tableElem, answerLevels, tableCaption, weeks);
-    return visualizeTableElement(tableElem);
+    return visualizeTableElement(tableElem, topValue);
   };
 
   fillTableElement = function(tableElem, answerLevels, tableCaption, weeks) {
@@ -89,10 +91,12 @@
     }
   };
 
-  visualizeTableElement = function(tableElem) {
+  visualizeTableElement = function(tableElem, topValue) {
     return tableElem.visualize({
       type: 'line',
-      width: '600px'
+      width: '600px',
+      bottomValue: 1,
+      topValue: topValue
     });
   };
 
