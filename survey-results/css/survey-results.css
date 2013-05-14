@@ -7,6 +7,7 @@ pre.well-small, pre.alert-success {
   word-wrap: normal;
   font-family: Arial;
   width: 70%;
+  padding: 9px;
 }
 #erfahrungen {
   padding-left: 50px;
