@@ -10,7 +10,7 @@
     var confidenceTableElem, surveyWeeks, topValue;
 
     confidenceTableElem = getConfidenceTableElement();
-    surveyWeeks = [0, 2, 3, 4];
+    surveyWeeks = [0, 2, 3, 4, 5];
     topValue = 7;
     return showTable(confidenceTableElem, confidenceLevels, "C++-Programmier-Selbstwirksamkeitserwartungen", surveyWeeks, topValue);
   };
@@ -19,7 +19,7 @@
     var feelingTableElem, surveyWeeks, topValue;
 
     feelingTableElem = getFeelingTableElem();
-    surveyWeeks = [2, 3, 4];
+    surveyWeeks = [2, 3, 4, 5];
     topValue = 5;
     return showTable(feelingTableElem, feelingLevels, "Wohlfühlfaktor", surveyWeeks, topValue);
   };

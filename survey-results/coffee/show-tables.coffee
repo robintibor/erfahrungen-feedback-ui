@@ -4,13 +4,13 @@
   
 showConfidenceTable = (confidenceLevels) ->
   confidenceTableElem = getConfidenceTableElement()
-  surveyWeeks = [0, 2, 3, 4]
+  surveyWeeks = [0, 2, 3, 4, 5]
   topValue = 7
   showTable(confidenceTableElem, confidenceLevels, "C++-Programmier-Selbstwirksamkeitserwartungen", surveyWeeks, topValue)
 
 showFeelingTable = (feelingLevels) ->
   feelingTableElem = getFeelingTableElem()
-  surveyWeeks = [2, 3, 4]
+  surveyWeeks = [2, 3, 4, 5]
   topValue = 5
   showTable(feelingTableElem, feelingLevels, "Wohlfühlfaktor", surveyWeeks, topValue)
 
