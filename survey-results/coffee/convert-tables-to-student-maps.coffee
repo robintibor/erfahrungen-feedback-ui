@@ -1,9 +1,11 @@
+#Groups with only those students that filled out all 5 self-efficacy surveys 
+# (Programmier-Vertrauen) at correct time
 # TDD - nada - PP
-Group1 = ["Alien", "Beratel", "lz33", "mk211", "mk488", "mp208", "R2D2", "Rechenzentrumskürzel", "sk163"]
+Group1 = ["Alien", "lz33", "mk211", "mk488", "mp208", "R2D2", "Rechenzentrumskürzel"]
 # PP - TDD - nada
 Group2 = ["cs434", "fb165", "hj22", "mr252", "sb404"]
 # nada - PP - TDD
-Group3 = ["Alien", "bh102", "ck76", "js542", "mp121", "mz70"]
+Group3 = ["bh102", "ck76", "js542", "mp121", "mz70"]
 
 GroupAll = Group1.concat(Group2).concat(Group3)
 

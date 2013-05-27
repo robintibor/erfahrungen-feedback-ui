@@ -1,11 +1,11 @@
 (function() {
   var Group1, Group2, Group3, GroupAll, Groups, addRowToStudentMap, addStudentAnswerToStudentMap, addTableToStudentMap, getDateFromRow, getGroupLevels, getNumberOfAnswersFromRow, getStudentNameFromRow, getSumFromRow;
 
-  Group1 = ["Alien", "Beratel", "lz33", "mk211", "mk488", "mp208", "R2D2", "Rechenzentrumskürzel", "sk163"];
+  Group1 = ["Alien", "lz33", "mk211", "mk488", "mp208", "R2D2", "Rechenzentrumskürzel"];
 
   Group2 = ["cs434", "fb165", "hj22", "mr252", "sb404"];
 
-  Group3 = ["Alien", "bh102", "ck76", "js542", "mp121", "mz70"];
+  Group3 = ["bh102", "ck76", "js542", "mp121", "mz70"];
 
   GroupAll = Group1.concat(Group2).concat(Group3);
 
