@@ -41,6 +41,7 @@ getGroupLevels = (studentsToResponses, groups) ->
   studentsToTables = {}
   addTableToStudentMap(tables.programmierVertrauen, "programmierVertrauen", studentsToTables)
   addTableToStudentMap(tables.wohlfuehlFaktor, "wohlfuehlFaktor", studentsToTables)
+  console.log(studentsToTables)
   return studentsToTables
   
 addTableToStudentMap = (table, surveyName, studentsToTables) ->

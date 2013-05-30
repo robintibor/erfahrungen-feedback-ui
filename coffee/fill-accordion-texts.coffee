@@ -30,7 +30,8 @@ createExercisesHTML = (studentExercises) ->
 
 getExercisesSortedAlphabetically = (studentExercises) ->
   exercises = Object.keys(studentExercises)
-  exercises.sort()
+  # sort reverse so that newest exercise sheet is on top
+  exercises.sort().reverse()
   return exercises
 
 createAccordionItem = (header, erfahrungen, feedback) ->
