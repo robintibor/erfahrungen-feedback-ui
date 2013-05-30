@@ -51,7 +51,7 @@
     var exercises;
 
     exercises = Object.keys(studentExercises);
-    exercises.sort();
+    exercises.sort().reverse();
     return exercises;
   };
 
