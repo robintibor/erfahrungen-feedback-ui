@@ -1,5 +1,5 @@
 (function() {
-  var addTableHeaders, createTableBodyHTML, fillData, fillTableElement, getConfidenceTableElement, getFeelingTableElem, getGroupName, showConfidenceTable, showFeelingTable, showTable, visualizeTableElement;
+  var addTableHeaders, createTableBodyHTML, fillData, fillTableElement, getConfidenceTableElement, getFeelingTableElem, getGroupName, getWeekLabel, showConfidenceTable, showFeelingTable, showTable, visualizeTableElement;
 
   this.showTables = function(groupLevels) {
     showConfidenceTable(groupLevels.programmierVertrauen);
@@ -43,15 +43,29 @@
   };
 
   addTableHeaders = function(tableElem, tableCaption, weeks) {
-    var tableHeaders, week, _i, _len;
+    var tableHeaders, week, weekLabel, _i, _len;
 
     tableHeaders = "  <caption>" + tableCaption + "</caption>  <thead>  	<tr>  	<td>Ende von Woche / <br/> Gruppe</td>";
     for (_i = 0, _len = weeks.length; _i < _len; _i++) {
       week = weeks[_i];
-      tableHeaders += "<th scope='col'>" + week + "</th>";
+      weekLabel = getWeekLabel(week);
+      tableHeaders += "<th scope='col'>" + weekLabel + "</th>";
     }
     tableHeaders += "  	</tr>	</thead>";
     return tableElem.append(tableHeaders);
+  };
+
+  getWeekLabel = function(week) {
+    switch (week) {
+      case 3:
+        return "3 (nach Übung 1)";
+      case 4:
+        return "4 (nach Übung 2)";
+      case 5:
+        return "5 (nach Übung 3)";
+      default:
+        return week;
+    }
   };
 
   fillData = function(tableElem, answerLevels) {

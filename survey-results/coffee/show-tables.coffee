@@ -35,11 +35,19 @@ addTableHeaders = (tableElem, tableCaption, weeks) ->
   	<tr>
   	<td>Ende von Woche / <br/> Gruppe</td>"
   for week in weeks
-    tableHeaders += "<th scope='col'>#{week}</th>"
+    weekLabel = getWeekLabel(week)
+    tableHeaders += "<th scope='col'>#{weekLabel}</th>"
   tableHeaders +="
   	</tr>
 	</thead>"
   tableElem.append(tableHeaders)
+
+getWeekLabel = (week) ->
+  switch week
+    when 3 then return "3 (nach Übung 1)"
+    when 4 then return "4 (nach Übung 2)"
+    when 5 then return "5 (nach Übung 3)"
+    else return week
 
 fillData = (tableElem, answerLevels) ->
   tableBodyHTML = createTableBodyHTML(answerLevels)
