@@ -66,7 +66,7 @@ readExerciseDirectories = (studentName, possibleExerciseDirectories) ->
     getAllEntries(directoryReader, readExerciseDirectoryForThisStudent)
 
 filterForExerciseDirectories = (possibleExerciseDirectories) ->
-  return filterDirectoriesWithRegExp(possibleExerciseDirectories, /bungsblatt-[0-9]{1,2}$/)
+  return filterDirectoriesWithRegExp(possibleExerciseDirectories, /bungsblatt-[0-9]{1,2}(-improved){0,1}$/)
 
 filterDirectoriesWithRegExp = (directories, regexp) ->
   return jQuery.grep(directories,

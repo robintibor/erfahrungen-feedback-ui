@@ -97,7 +97,7 @@
   };
 
   filterForExerciseDirectories = function(possibleExerciseDirectories) {
-    return filterDirectoriesWithRegExp(possibleExerciseDirectories, /bungsblatt-[0-9]{1,2}$/);
+    return filterDirectoriesWithRegExp(possibleExerciseDirectories, /bungsblatt-[0-9]{1,2}(-improved){0,1}$/);
   };
 
   filterDirectoriesWithRegExp = function(directories, regexp) {
