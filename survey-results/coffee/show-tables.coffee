@@ -12,6 +12,8 @@ showFeelingTable = (feelingLevels) ->
   feelingTableElem = getFeelingTableElem()
   surveyWeeks = [2, 3, 4, 5]
   topValue = 5
+  feelingLevels = convertAveragesForFeelingTable(feelingLevels)
+  console.log("feelinglevels", feelingLevels)
   showTable(feelingTableElem, feelingLevels, "Wohlfühlfaktor", surveyWeeks, topValue)
 
 getConfidenceTableElement = ->
@@ -20,6 +22,14 @@ getConfidenceTableElement = ->
 getFeelingTableElem = ->
   return $('#feelingTable')
 
+convertAveragesForFeelingTable = (feelingLevels) ->
+  # convert because 1 is best value and 5 worst, but in confidence table
+  # 7 is best and 1 is worst
+  for weeks, groupNr in feelingLevels
+    for feelingLevel in weeks
+      feelingLevel.average = 5 - feelingLevel.average
+  return feelingLevels
+  
 showTable = (tableElem, answerLevels, tableCaption, weeks, topValue) ->  
   fillTableElement(tableElem, answerLevels, tableCaption, weeks)
   visualizeTableElement(tableElem, topValue)

@@ -1,5 +1,5 @@
 (function() {
-  var addTableHeaders, createTableBodyHTML, fillData, fillTableElement, getConfidenceTableElement, getFeelingTableElem, getGroupName, getWeekLabel, showConfidenceTable, showFeelingTable, showTable, visualizeTableElement;
+  var addTableHeaders, convertAveragesForFeelingTable, createTableBodyHTML, fillData, fillTableElement, getConfidenceTableElement, getFeelingTableElem, getGroupName, getWeekLabel, showConfidenceTable, showFeelingTable, showTable, visualizeTableElement;
 
   this.showTables = function(groupLevels) {
     showConfidenceTable(groupLevels.programmierVertrauen);
@@ -21,6 +21,8 @@
     feelingTableElem = getFeelingTableElem();
     surveyWeeks = [2, 3, 4, 5];
     topValue = 5;
+    feelingLevels = convertAveragesForFeelingTable(feelingLevels);
+    console.log("feelinglevels", feelingLevels);
     return showTable(feelingTableElem, feelingLevels, "Wohlfühlfaktor", surveyWeeks, topValue);
   };
 
@@ -30,6 +32,19 @@
 
   getFeelingTableElem = function() {
     return $('#feelingTable');
+  };
+
+  convertAveragesForFeelingTable = function(feelingLevels) {
+    var feelingLevel, groupNr, weeks, _i, _j, _len, _len1;
+
+    for (groupNr = _i = 0, _len = feelingLevels.length; _i < _len; groupNr = ++_i) {
+      weeks = feelingLevels[groupNr];
+      for (_j = 0, _len1 = weeks.length; _j < _len1; _j++) {
+        feelingLevel = weeks[_j];
+        feelingLevel.average = 5 - feelingLevel.average;
+      }
+    }
+    return feelingLevels;
   };
 
   showTable = function(tableElem, answerLevels, tableCaption, weeks, topValue) {
