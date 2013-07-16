@@ -89,6 +89,11 @@ addPropertyFile = (studentName, exerciseName, property, file) ->
   reader.onload = (event) ->
     propertyText = event.target.result
     addPropertyToThisExercise(propertyText)
+  reader.onerror = (error) ->
+    # try again!
+    console.log("Error when reading file:", error)
+    console.log("Trying to read file again...")
+    reader.readAsText(file)
   reader.readAsText(file)
 
 addProperty = (studentName, exerciseName, property, propertyText) ->

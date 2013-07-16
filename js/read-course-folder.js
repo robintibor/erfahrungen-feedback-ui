@@ -136,6 +136,11 @@
       propertyText = event.target.result;
       return addPropertyToThisExercise(propertyText);
     };
+    reader.onerror = function(error) {
+      console.log("Error when reading file:", error);
+      console.log("Trying to read file again...");
+      return reader.readAsText(file);
+    };
     return reader.readAsText(file);
   };
 
