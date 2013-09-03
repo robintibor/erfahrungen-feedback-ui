@@ -86,35 +86,37 @@ readExerciseDirectory = (studentName, exerciseName, entries) ->
 addPropertyFile = (studentName, exerciseName, property, file) ->
   reader = new FileReader()
   addPropertyToThisExercise = addProperty.bind(this, studentName, exerciseName, property)
-  reader.onload = (event) ->
+  onload = (event) ->
     propertyText = event.target.result
     addPropertyToThisExercise(propertyText)
-  reader.onerror = (error) ->
+  onerror = (error) ->
     # try again!
-    console.log("Error when reading file:", error)
-    console.log("Trying to read file again...")
     reader.readAsText(file)
+    
+  reader.onload = onload.bind(this)
+  reader.onerror = onerror.bind(this)
   reader.readAsText(file)
 
 addProperty = (studentName, exerciseName, property, propertyText) ->
   studentsToExercises[studentName][exerciseName][property] = propertyText
-  lastFileRead = Date.now()
+  @lastFileRead = Date.now()
 
 lastFileRead = null
 
 fillAccordionWhenFilesRead = ->
   setLastFileReadTimeIfNecessary()
-  maximumTimeToReadFile = 1500
-  if (Date.now() - lastFileRead > maximumTimeToReadFile)
+  maximumTimeToReadFile = 2500
+  if (Date.now() - @lastFileRead > maximumTimeToReadFile)
+    console.log("now start fillling accordions")
     window.fillAccordionHTMLs(studentsToExercises)
   else setTimeout(
     fillAccordionWhenFilesRead
-    100
+    250
   )
 
 setLastFileReadTimeIfNecessary = ->
-  if (not lastFileRead?)
-    lastFileRead = Date.now() + 1000
+  if (not @lastFileRead?)
+    @lastFileRead = Date.now() + 1000
 
 showBlackBorderOnDragEnter = ->
   $('#courseFolderDrop').on(
